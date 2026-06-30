@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>금융 법령 정보 검색 시스템 (RAG)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f8f9fb;
+      color: #1a1a2e;
+      line-height: 1.7;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #0f3460 0%, #16213e 60%, #0f3460 100%);
+      color: #fff;
+      padding: 72px 24px 56px;
+      text-align: center;
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    .hero p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.78);
+      max-width: 620px;
+      margin: 0 auto 32px;
+    }
+    .hero .meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+    }
+    .hero .meta span::before { content: "· "; }
+    .hero .meta span:first-child::before { content: ""; }
+
+    /* ── Layout ── */
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    section { padding: 56px 0; }
+    section + section { border-top: 1px solid #e8eaf0; }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 28px;
+      color: #0f3460;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 22px;
+      background: #e94560;
+      border-radius: 2px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #1a1a2e;
+    }
+
+    /* ── Screenshots ── */
+    .screenshots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 600px) { .screenshots { grid-template-columns: 1fr; } }
+
+    .screenshot-card {
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .screenshot-card img {
+      width: 100%;
+      display: block;
+      background: #f0f2f5;
+    }
+    .screenshot-card .caption {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    /* ── Features ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .feature-card {
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 12px;
+      padding: 22px 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .feature-icon { font-size: 26px; margin-bottom: 10px; }
+    .feature-card h3 { font-size: 15px; margin-bottom: 6px; }
+    .feature-card p { font-size: 13px; color: #666; line-height: 1.5; }
+
+    /* ── Tech stack ── */
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .tech-table th {
+      background: #0f3460;
+      color: #fff;
+      padding: 12px 18px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .tech-table td {
+      padding: 12px 18px;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .tech-table tr:last-child td { border-bottom: none; }
+    .tech-table tr:nth-child(even) td { background: #fafbfc; }
+    .tech-table td:first-child { color: #555; font-weight: 500; width: 160px; }
+
+    /* ── Pipeline ── */
+    .pipeline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .pipeline-step {
+      background: #0f3460;
+      color: #fff;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .pipeline-step.highlight { background: #e94560; }
+    .pipeline-arrow { color: #bbb; font-size: 18px; }
+    .pipeline-desc {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .pipeline-desc-item {
+      background: #f8f9fb;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+    .pipeline-desc-item strong { display: block; margin-bottom: 4px; color: #0f3460; }
+
+    /* ── Evaluation ── */
+    .eval-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .eval-table th {
+      background: #0f3460;
+      color: #fff;
+      padding: 12px 18px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .eval-table td { padding: 12px 18px; border-bottom: 1px solid #f0f2f5; }
+    .eval-table tr:last-child td { border-bottom: none; }
+    .eval-table tr:nth-child(even) td { background: #fafbfc; }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-warn { background: #fff3cd; color: #856404; }
+    .badge-fail { background: #fce8e8; color: #c0392b; }
+
+    /* ── Q&A examples ── */
+    .qa-list { display: flex; flex-direction: column; gap: 16px; }
+    .qa-item {
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .qa-q {
+      background: #0f3460;
+      color: #fff;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .qa-q::before { content: "Q. "; opacity: 0.7; }
+    .qa-a {
+      padding: 14px 18px;
+      font-size: 14px;
+      color: #333;
+      line-height: 1.65;
+    }
+
+    /* ── Improvements ── */
+    .improvement-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .improvement-table th {
+      background: #0f3460;
+      color: #fff;
+      padding: 11px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .improvement-table td { padding: 11px 16px; border-bottom: 1px solid #f0f2f5; vertical-align: top; }
+    .improvement-table tr:last-child td { border-bottom: none; }
+    .improvement-table tr:nth-child(even) td { background: #fafbfc; }
+    .improvement-table td:first-child { color: #555; white-space: nowrap; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 36px 24px;
+      font-size: 13px;
+      color: #999;
+      border-top: 1px solid #e8eaf0;
+      background: #fff;
+    }
+    footer a { color: #0f3460; text-decoration: none; }
+
+    /* ── Code inline ── */
+    code {
+      background: #f0f2f8;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-family: "SF Mono", Menlo, monospace;
+      color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="tag">RAG · NLP · 금융 도메인</div>
+  <h1>금융 법령 정보 검색 시스템</h1>
+  <p>생활법령정보의 금융 법령을 수집·벡터화하여 의미 기반 검색과 AI 답변을 결합한 RAG 파이프라인을 처음부터 직접 구현했습니다.</p>
+  <div class="meta">
+    <span>데이터 수집 · 전처리 · 임베딩 · 검색 · 생성 전 과정 직접 구현</span>
+    <span>한국어 특화 임베딩 모델</span>
+    <span>Upstage Solar Pro3 LLM</span>
+    <span>Streamlit UI</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 화면 구현 -->
+  <section>
+    <h2>화면 구현</h2>
+    <div class="screenshots">
+      <div class="screenshot-card">
+        <img src="image/메인페이지.png" alt="메인 페이지 스크린샷" />
+        <div class="caption">메인 페이지 — 질문 입력 및 검색 결과 수 선택</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="image/질문결과2.png" alt="질문 결과 스크린샷" />
+        <div class="caption">질문 결과 — AI 답변 + 원본 청크 출처 표시</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 주요 기능 -->
+  <section>
+    <h2>주요 기능</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>의미 기반 검색</h3>
+        <p>키워드 매칭이 아닌 코사인 유사도(FAISS IndexFlatIP) 기반 벡터 검색으로 의미적으로 유사한 법령 청크를 검색합니다.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI 답변 생성</h3>
+        <p>Upstage Solar Pro3 LLM을 활용해 검색된 법령 청크를 컨텍스트로 전달하고 사용자 질문에 맞는 답변을 생성합니다.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <h3>원본 출처 표시</h3>
+        <p>답변 근거가 된 법령 원문 청크를 유사도 점수와 함께 표시하여 사용자가 직접 검증할 수 있습니다.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <h3>검색 결과 수 조절</h3>
+        <p>3 / 5 / 10건을 선택해 참조 청크 수를 유연하게 조정합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 기술 스택 -->
+  <section>
+    <h2>기술 스택</h2>
+    <table class="tech-table">
+      <thead><tr><th>구성 요소</th><th>기술</th></tr></thead>
+      <tbody>
+        <tr><td>데이터 수집</td><td>requests, BeautifulSoup4 — easylaw.go.kr 크롤러 직접 구현</td></tr>
+        <tr><td>임베딩 모델</td><td>jhgan/ko-sroberta-multitask (HuggingFace, 한국어 특화)</td></tr>
+        <tr><td>벡터 DB</td><td>FAISS IndexFlatIP + L2 정규화 (코사인 유사도)</td></tr>
+        <tr><td>LLM</td><td>Upstage Solar Pro3</td></tr>
+        <tr><td>웹 UI</td><td>Streamlit</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 파이프라인 -->
+  <section>
+    <h2>데이터 파이프라인</h2>
+    <div class="pipeline">
+      <div class="pipeline-step">crawling.py</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step">extract.py</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step">chunking.py</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step">embedding.py</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step">vector_search.py</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step highlight">app.py</div>
+    </div>
+    <div class="pipeline-desc">
+      <div class="pipeline-desc-item">
+        <strong>크롤링</strong>
+        HTML 구조(plv1a/plv2a/plv3a/tplvN) 유형별 파싱 → <code>law_data.json</code>
+      </div>
+      <div class="pipeline-desc-item">
+        <strong>추출</strong>
+        섹션 제목·본문·표를 분리 구조화 → <code>text_sections.json</code>
+      </div>
+      <div class="pipeline-desc-item">
+        <strong>청킹</strong>
+        목표 500자 / 최대 700자. 표는 마크다운으로 별도 청크 → <code>chunks.json</code>
+      </div>
+      <div class="pipeline-desc-item">
+        <strong>임베딩</strong>
+        한국어 특화 모델로 벡터화 → <code>embeddings.npy</code>
+      </div>
+      <div class="pipeline-desc-item">
+        <strong>인덱스 구축</strong>
+        FAISS IndexFlatIP + L2 정규화 → <code>faiss_index.bin</code>
+      </div>
+      <div class="pipeline-desc-item">
+        <strong>서비스</strong>
+        Streamlit 검색 앱 — 검색 + LLM 답변 생성
+      </div>
+    </div>
+
+    <!-- vector embedding image -->
+    <div style="margin-top:24px;">
+      <img src="image/벡터임베딩.png" alt="벡터 임베딩 검색 결과" style="max-width:100%;border-radius:10px;border:1px solid #e8eaf0;" />
+      <p style="font-size:13px;color:#666;margin-top:8px;">테스트 쿼리 3개("예금자 보호 한도", "보험 청약 취소", "대출 계약 해지") 실행 — 코사인 유사도 점수와 함께 상위 청크 반환</p>
+    </div>
+  </section>
+
+  <!-- 답변 품질 평가 -->
+  <section>
+    <h2>답변 품질 자체 평가</h2>
+    <p style="font-size:14px;color:#555;margin-bottom:20px;">시스템을 직접 사용하며 소스코드 정적 분석을 통해 신뢰성을 평가했습니다. 한계를 파악하고 개선 방향을 도출하는 과정을 <code>evaluation.md</code>에 기록했습니다.</p>
+    <table class="eval-table">
+      <thead><tr><th>평가 항목</th><th>판정</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Faithfulness (충실성)</td>
+          <td><span class="badge badge-warn">⚠️ 부분 충족</span></td>
+          <td>시스템 프롬프트 지침 존재. 사후 자동 검증 레이어 없음</td>
+        </tr>
+        <tr>
+          <td>Context Precision (검색 정밀도)</td>
+          <td><span class="badge badge-warn">⚠️ 부분 충족</span></td>
+          <td>유사도 임계값(0.5) 정의됨. LLM 컨텍스트에 미적용 (버그 식별)</td>
+        </tr>
+        <tr>
+          <td>Answer Relevance (답변 관련성)</td>
+          <td><span class="badge badge-warn">⚠️ 부분 충족</span></td>
+          <td>출력 형식·예시 명시 및 temperature=0.2 적용. 자동 측정 없음</td>
+        </tr>
+        <tr>
+          <td>수치 정확성</td>
+          <td><span class="badge badge-fail">❌ 미충족</span></td>
+          <td>금액·기간 수치 검증 레이어 없음. 금융 도메인 리스크 인지</td>
+        </tr>
+        <tr>
+          <td>Safety (면책 안내)</td>
+          <td><span class="badge badge-warn">⚠️ 부분 충족</span></td>
+          <td>UI 고정 문구로 사용자에게 항상 노출. LLM 생성 답변 보장 없음</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px;background:#f8f9fb;border-radius:10px;padding:16px 20px;font-size:13px;color:#555;border-left:4px solid #0f3460;">
+      <strong>설계 강점:</strong> 출처 투명성(유사도 점수 포함 청크 노출) / 한국어 특화 임베딩 / 표 별도 청킹으로 수치 구조 보존 / 출력 형식 정·오답 예시 제시 / temperature 0.2로 답변 편차 최소화
+    </div>
+  </section>
+
+  <!-- 검색 예시 -->
+  <section>
+    <h2>검색 예시</h2>
+    <div class="qa-list">
+      <div class="qa-item">
+        <div class="qa-q">모르는 사람에게 잘못 송금했습니다. 송금한 금액을 돌려받을 수 있는 방법이 있을까요?</div>
+        <div class="qa-a">착오송금 반환지원제도를 통해 송금한 금액을 돌려받을 수 있습니다. 자금이체 금융회사 등을 통하여 착오 송금한 송금인의 신청이 있는 경우 예금보험공사가 대신 찾아주는 제도입니다. 해당 제도는 「예금자보호법」 제39조의2제1항에 근거하며, 예금보험공사 금융안심포털(fins.kdic.or.kr)에서 신청대상여부 확인 및 반환지원신청을 할 수 있습니다.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">금융상품에는 어떤 종류가 있어?</div>
+        <div class="qa-a">금융상품에는 크게 네 가지 유형이 있습니다. 첫째, 예금성 상품은 예금·예탁금 등 금융기관이 장래에 이자와 함께 돌려주기로 하는 계약입니다. 둘째, 대출성 상품은 대출·신용카드·할부금융 등이 포함됩니다. 셋째, 투자성 상품은 금융투자상품·집합투자증권 등으로 수익을 추구합니다. 넷째, 보장성 상품은 보험·공제 등 위험으로부터 재정적 보장을 제공합니다.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">차를 사서 500만원을 12개월 할부로 갚으려고 해. 매달 얼마 내면 돼?</div>
+        <div class="qa-a">할부로 차를 구매할 경우 매달 상환해야 하는 금액은 대출 금액, 이자율, 상환 기간 등에 따라 결정됩니다. 제공된 참고 자료에는 할부 구매와 관련된 구체적인 상환 금액 계산 방법이 포함되어 있지 않습니다. 정확한 상환 금액을 안내하기 위해서는 해당 금융 상품의 이자율 및 상환 조건을 확인해야 합니다.</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:#999;margin-top:12px;">⚠️ 이 답변은 참고용 정보이며 법률 자문을 대체할 수 없습니다.</p>
+  </section>
+
+  <!-- 개선 이력 -->
+  <section>
+    <h2>개선 이력</h2>
+    <table class="improvement-table">
+      <thead><tr><th>날짜</th><th>대상</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>2026-06-23</td>
+          <td><code>crawling.py</code></td>
+          <td>테이블 추출 범위 확장 — <code>tplv5</code>만 처리하던 조건을 <code>tplv\d+$</code> 정규식으로 변경해 다양한 variant 수집</td>
+        </tr>
+        <tr>
+          <td>2026-06-24</td>
+          <td><code>extract.py</code></td>
+          <td>파이프라인 누락 단계 추가 — law_data → text_sections 변환 모듈 신규 작성</td>
+        </tr>
+        <tr>
+          <td>2026-06-24</td>
+          <td><code>vector_search.py</code></td>
+          <td>인덱스 구축 시 <code>faiss.normalize_L2</code> 추가 — 임베딩 저장 이후 정밀도 손실 방지를 위한 이중 정규화</td>
+        </tr>
+        <tr>
+          <td>2026-06-24</td>
+          <td><code>app.py</code></td>
+          <td>system_prompt 개선 — 링크 출력 형식 명시, 출력 형식 템플릿 및 정·오답 예시 추가, temperature=0.2로 답변 일관성 향상</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<footer>
+  <p>데이터 출처: <a href="https://www.easylaw.go.kr" target="_blank">국가법령정보센터 생활법령정보</a></p>
+  <p style="margin-top:6px;">금융 법령 정보 검색 시스템 (RAG) · 금융 도메인 의미 기반 검색 · Upstage Solar Pro3</p>
+</footer>
+
+</body>
+</html>
