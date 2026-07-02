@@ -240,3 +240,5 @@ project_finance/
 | 2026-06-24 | `src/extract.py` | 파이프라인 누락 단계 추가 — `law_data.json`에서 섹션 제목·본문·표를 분리해 `text_sections.json`으로 변환하는 모듈 신규 작성 |
 | 2026-06-24 | `src/vector_search.py` | 인덱스 구축 시 `faiss.normalize_L2` 추가 — 임베딩 저장 이후 정밀도 손실 가능성을 방지하기 위한 이중 정규화 적용 |
 | 2026-06-24 | `app.py` | system_prompt 개선 — 링크 출력 형식 명시(조사 분리), 출력 형식 템플릿 및 정·오답 예시 추가, `temperature=0.2`로 답변 일관성 향상 |
+| 2026-07-02 | `app.py` | 유사도 임계값 LLM 컨텍스트 적용 — `SIMILARITY_THRESHOLD` 미만 청크가 LLM에 그대로 전달되던 버그 수정. `generate_answer`에 필터링된 `relevant_results`만 전달하고, 관련 청크가 없으면 LLM 호출을 건너뛰도록 변경 |
+| 2026-07-02 | `app.py` | system_prompt 구조 결함 수정 — 인접 문자열 연결(개행 없이 규칙이 이어 붙던 문제)을 멀티라인 문자열로 전환. 수치 계산·변환 금지 규칙과 면책 안내 규칙 추가, 정규식 후처리로 이미 보장되는 링크 조사 분리 규칙은 프롬프트에서 제거 |
