@@ -34,7 +34,7 @@
 
   ::selection{background:var(--signal);color:#fff;}
 
-  .wrap{max-width:flex;margin:0 auto;padding:0 38px;}
+  .wrap{margin:0 auto;padding:0 38px;}
 
   /* ── ticker / topbar ── */
   .topbar{
@@ -101,7 +101,7 @@
   .sec-num{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--signal);}
   .sec-title{font-family:var(--display);font-size:26px;font-weight:600;letter-spacing:-.01em;}
 
-  p.body{font-size:16px;color:#232a35;max-width:flex;margin-bottom:14px;}
+  p.body{font-size:16px;color:#232a35;margin-bottom:14px;}
   .body strong{font-weight:600;color:var(--ink);background:linear-gradient(transparent 62%, #ffe39c 62%);}
 
   /* ── screenshots ── */
@@ -258,7 +258,7 @@
   <header class="hero">
     <div class="kicker">Portfolio</div>
     <h1>금융 AI 답변의 신뢰성을 검증하는<br><span class="em">AI 서비스 품질 평가</span></h1>
-    <p class="lede">법령 데이터 기반 RAG를 평가 대상으로 직접 구축하고, 이 시스템이 생성한 답변이 얼마나 신뢰할 수 있는지 <strong>평가 기준을 세워 검증하고 Hallucination의 원인을 계층별로 진단 및 개선</strong>한 프로젝트입니다. 금융·법률 도메인에서 "그럴듯한 오답"은 오류가 아니라 사고로 이어질 수 있다는 문제의식에서 출발했습니다.</p>
+    <p class="lede">시스템이 생성한 일부 답변을 얼마나 신뢰할 수 있는지 <strong>평가 기준을 세워 검증하고 Hallucination의 원인을 계층별로 진단 및 개선</strong>한 프로젝트입니다. 금융·법률 도메인에서 "그럴듯한 오답"은 오류가 아니라 사고로 이어질 수 있다는 문제의식에서 출발했습니다.</p>
 
     <div class="meta-row">
       <span class="chip hot">AI Quality Evaluation</span>
@@ -278,7 +278,7 @@
   <!-- 01. 프로젝트 개요 -->
   <section id="why">
     <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title">프로젝트 개요</h2></div>
-    <p class="body">AI가 금융 서비스에서 답변을 제공할 때, 틀린 답변은 단순한 오류가 아니라 <strong>금융 사고로 이어질 수 있습니다</strong>. 이 프로젝트는 AI 답변이 얼마나 신뢰할 수 있는지 객관적으로 평가하고, 오답이 발생하는 지점을 계층별로 진단하는 것을 목표로 합니다. 평가할 대상이 필요했기 때문에 법령 데이터 기반 RAG 시스템을 구축했고, 이 시스템이 생성한 답변을 국가법령정보센터의 100문 100답 공식 답변과 대조해 평가했습니다.</p>
+    <p class="body">AI가 금융 서비스에서 답변을 제공할 때, 틀린 답변은 단순한 오류가 아니라 <strong>금융 사고로 이어질 수 있습니다</strong>. 이 프로젝트는 AI 답변이 얼마나 신뢰할 수 있는지 객관적으로 평가하고, 오답이 발생하는 지점을 계층별로 진단하는 것을 목표로 합니다. 평가할 대상이 필요했기 때문에 법령 데이터 기반 RAG 시스템을 구축했고, 이 시스템이 생성한 일부 답변을 생활법령정보 사이트의 100문 100답 공식 답변과 대조해 평가했습니다.</p>
     <div class="split">
       <div>
         <h4 class="p">문제 정의</h4>
@@ -304,11 +304,11 @@
   <!-- 02. RAG 구현 -->
   <section id="build">
     <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">RAG 구현 — 평가 대상 시스템</h2></div>
-    <p class="body">위 평가를 하려면 평가할 대상이 필요했습니다. 이에 데이터 수집부터 서빙까지 구현했습니다.</p>
+    <p class="body">데이터 수집부터 서빙까지 구현했습니다.</p>
     <div class="pipe">
       <div class="stage">
         <div class="n">STAGE 1</div><div class="t">수집</div>
-        <div class="d">생활법령 사이트 스크래핑</div>
+        <div class="d">생활법령정보 사이트 스크래핑</div>
         <span class="tag">Python · requests</span>
       </div>
       <div class="stage">
@@ -363,30 +363,10 @@
     </div>
   </section>
 
-  <!-- 03. 검색 예시 -->
-  <section id="examples">
-    <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">검색 예시</h2></div>
-    <div class="qa-list">
-      <div class="qa-item">
-        <div class="qa-q">모르는 사람에게 잘못 송금했습니다. 송금한 금액을 돌려받을 수 있는 방법이 있을까요?</div>
-        <div class="qa-a">착오송금 반환지원제도를 통해 송금한 금액을 돌려받을 수 있습니다. 자금이체 금융회사 등을 통하여 착오 송금한 송금인의 신청이 있는 경우 예금보험공사가 대신 찾아주는 제도입니다. 해당 제도는 「예금자보호법」 제39조의2제1항에 근거하며, 예금보험공사 금융안심포털(https://fins.kdic.or.kr)/) 에서 신청대상여부 확인 및 반환지원신청을 할 수 있습니다.</div>
-      </div>
-      <div class="qa-item">
-        <div class="qa-q">금융상품에는 어떤 종류가 있어?</div>
-        <div class="qa-a">금융상품에는 크게 네 가지 유형이 있습니다. 첫째, 예금성 상품은 예금·예탁금 등 금융기관이 장래에 이자와 함께 돌려주기로 하는 계약입니다. 둘째, 대출성 상품은 대출·신용카드·할부금융 등이 포함됩니다. 셋째, 투자성 상품은 금융투자상품·집합투자증권 등으로 수익을 추구합니다. 넷째, 보장성 상품은 보험·공제 등 위험으로부터 재정적 보장을 제공합니다.</div>
-      </div>
-      <div class="qa-item">
-        <div class="qa-q">차를 사서 500만원을 12개월 할부로 갚으려고 해. 매달 얼마 내면 돼?</div>
-        <div class="qa-a">할부로 차를 구매할 경우 매달 상환해야 하는 금액은 대출 금액, 이자율, 상환 기간 등에 따라 결정됩니다. 제공된 참고 자료에는 할부 구매와 관련된 구체적인 상환 금액 계산 방법이 포함되어 있지 않습니다. 정확한 상환 금액을 안내하기 위해서는 해당 금융 상품의 이자율 및 상환 조건을 확인해야 합니다. <em style="font-style:normal;font-size:12.5px;color:var(--muted);">— 참고 자료 범위 밖 질문에 대한 적절한 비답변 예시</em></div>
-      </div>
-    </div>
-    <p style="font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:12px;">⚠ 이 답변은 참고용 정보이며 법률 자문을 대체할 수 없습니다.</p>
-  </section>
-
-  <!-- 04. 실행 결과 -->
+  <!-- 03. 실행 결과 -->
   <section id="results">
-    <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title">실행 결과</h2></div>
-    <p class="body">아래는 위 RAG 시스템이 실제로 생성한 답변 9건 전체입니다. 이후 이어지는 평가 프레임워크(05)·시나리오 설계(06)·Hallucination 분석(07)은 모두 이 실행 결과를 대상으로 합니다. 이 중 질문 5~7은 국가법령정보센터 생활법률사이트의 공식 답변이 1:1로 존재해, 원문과 나란히 대조했습니다.</p>
+    <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">실행 결과</h2></div>
+    <p class="body">아래는 위 RAG 시스템이 실제로 생성한 답변 9건 전체입니다. 이후 이어지는 평가 프레임워크(05)·시나리오 설계(06)·Hallucination 분석(07)은 모두 이 실행 결과를 대상으로 합니다. 이 중 질문 5~7은 생활법령정보 사이트의 공식 답변이 1:1로 존재해, 원문과 나란히 대조했습니다.</p>
 
     <p style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">LLM 답변 — 테스트 질문 9건</p>
     <table>
@@ -394,57 +374,57 @@
       <tbody>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">1</td>
-          <td class="q-cell">예금자보호제도는 무엇이고, 보호 한도는 얼마인가요?</td>
-          <td class="a-cell">예금자보호제도는 금융회사가 영업정지나 파산 등으로 예금 등을 지급할 수 없는 경우 예금보험공사가 해당 금융회사를 대신하여 예금 등을 지급하는 제도입니다(「예금자보호법」 제1조). 이 제도는 예금자의 권익을 보호하기 위해 마련되었으며, 보호대상 금융회사가 취급하는 예금등에 대해서만 적용됩니다. 보호 한도는 금융회사별로 상이하며, 일반적으로 1억원 또는 전액 보장이 적용됩니다.</td>
-          <td>—</td>
+          <td class="q-cell">모르는 사람에게 잘못 송금했습니다. 송금한 금액을 돌려받을 수 있는 방법이 있을까요?</td>
+          <td class="a-cell">착오송금 반환지원제도를 통해 송금한 금액을 돌려받을 수 있습니다. 자금이체 금융회사 등을 통하여 착오 송금한 송금인의 신청이 있는 경우 예금보험공사가 대신 찾아주는 제도입니다. 해당 제도는 「예금자보호법」 제39조의2제1항에 근거하며, 예금보험공사 금융안심포털(https://fins.kdic.or.kr) 에서 신청대상여부 확인 및 반환지원신청을 할 수 있습니다.<br><br>[참고 1], [참고 3]</td>
+          <td>미평가 답변</td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">2</td>
-          <td class="q-cell">은행이 망하면 제 예금은 어떻게 되나요?</td>
-          <td class="a-cell">은행 등 부보금융회사가 파산 등 보험사고가 발생하여 예금 등을 지급할 수 없는 경우, 예금자보호법에 따라 예금보험공사가 해당 금융회사를 대신하여 예금보험금 등을 지급합니다. 예금보험금 지급 대상은 예금등 채권을 가진 예금자등이며, 예금등에는 원금·원본·이자·이익·보험금 및 각종 지급금과 약정된 금전 채권이 포함됩니다. 구체적인 지급 한도와 절차는 관련 법령 및 예금보험공사의 규정에 따라 정해집니다.</td>
-          <td>—</td>
+          <td class="q-cell">금융상품에는 어떤 종류가 있어?</td>
+          <td class="a-cell">금융상품은 크게 예금성 상품, 대출성 상품, 투자성 상품, 보장성 상품으로 구분됩니다. 예금성 상품에는 예금, 예탁금 등이 포함되며, 대출성 상품에는 대출, 신용카드, 시설대여, 연불판매, 할부금융, 대부, 연계대출, 소액후불결제 등이 있습니다. 투자성 상품에는 금융투자상품, 연계투자, 신탁계약, 투자일임계약, 집합투자증권, 단기금융회사의 발행어음, 종합투자계좌 등이 포함되며, 보장성 상품에는 보험상품, 공제, 보험상품과 유사한 금융상품이 해당합니다.<br><br>[참고 1], [참고 2]</td>
+          <td>미평가 답변</td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">3</td>
-          <td class="q-cell">모르는 사람에게 잘못 송금했습니다. 송금한 금액을 돌려받을 수 있는 방법이 있을까요?</td>
-          <td class="a-cell">착오송금 반환지원제도를 통해 송금한 금액을 돌려받을 수 있습니다. 자금이체 금융회사 등을 통하여 착오 송금한 송금인의 신청이 있는 경우 예금보험공사가 대신 찾아주는 제도입니다. 해당 제도는 「예금자보호법」 제39조의2제1항에 근거하며, 예금보험공사 금융안심포털(https://fins.kdic.or.kr) 에서 신청대상여부 확인 및 반환지원신청을 할 수 있습니다.</td>
-          <td>—</td>
+          <td class="q-cell">예금자보호제도는 무엇이고, 보호 한도는 얼마인가요?</td>
+          <td class="a-cell">예금자보호제도는 금융회사가 영업정지나 파산 등으로 예금 등을 지급할 수 없는 경우 예금보험공사가 해당 금융회사를 대신하여 예금 등을 지급하는 제도입니다(「예금자보호법」 제1조). 이 제도는 예금자의 권익을 보호하기 위해 마련되었으며, 보호대상 금융회사가 취급하는 예금등에 대해서만 적용됩니다. 보호 한도는 금융회사별로 상이하며, 일반적으로 1억원 또는 전액 보장이 적용됩니다.<br><br>[참고 1], [참고 3], [참고 4], [참고 5]</td>
+          <td>미평가 답변</td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">4</td>
-          <td class="q-cell">금융상품에는 어떤 종류가 있어?</td>
-          <td class="a-cell">금융상품은 크게 예금성 상품, 대출성 상품, 투자성 상품, 보장성 상품으로 구분됩니다. 예금성 상품에는 예금, 예탁금 등이 포함되며, 대출성 상품에는 대출, 신용카드, 시설대여, 연불판매, 할부금융, 대부, 연계대출, 소액후불결제 등이 있습니다. 투자성 상품에는 금융투자상품, 연계투자, 신탁계약, 투자일임계약, 집합투자증권, 단기금융회사의 발행어음, 종합투자계좌 등이 포함되며, 보장성 상품에는 보험상품, 공제, 보험상품과 유사한 금융상품이 해당합니다.</td>
-          <td>—</td>
+          <td class="q-cell">은행이 망하면 제 예금은 어떻게 되나요?</td>
+          <td class="a-cell">은행 등 부보금융회사가 파산 등 보험사고가 발생하여 예금 등을 지급할 수 없는 경우, 예금자보호법에 따라 예금보험공사가 해당 금융회사를 대신하여 예금보험금 등을 지급합니다. 예금보험금 지급 대상은 예금등 채권을 가진 예금자등이며, 예금등에는 원금·원본·이자·이익·보험금 및 각종 지급금과 약정된 금전 채권이 포함됩니다. 구체적인 지급 한도와 절차는 관련 법령 및 예금보험공사의 규정에 따라 정해집니다.<br><br>[참고 1], [참고 4]</td>
+          <td>미평가 답변</td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">5</td>
           <td class="q-cell">아는 선배의 대출권유를 받고 계약을 하긴 했는데, 도저히 제가 감당 할 여력이 안 되는 것 같습니다. 대출계약을 철회할 수 있나요?</td>
-          <td class="a-cell">대출계약을 철회할 수 있는지 여부는 계약 체결 후 일정 기간 내에 가능합니다. 「금융소비자 보호에 관한 법률」에 따라 일반금융소비자는 대출성 상품에 대해 청약철회권을 행사할 수 있으며, 철회 시 금융상품판매업자는 3영업일 이내에 이미 받은 금전·재화 등을 반환해야 합니다. 다만, 철회 가능 기간은 법령에 정해진 기준에 따라 제한될 수 있으므로 구체적인 기간은 관련 규정을 확인해야 합니다.</td>
-          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=1&cciNo=2&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법률사이트 답변</a></td>
+          <td class="a-cell">대출계약을 철회할 수 있는지 여부는 계약 체결 후 일정 기간 내에 가능합니다. 「금융소비자 보호에 관한 법률」에 따라 일반금융소비자는 대출성 상품에 대해 청약철회권을 행사할 수 있으며, 철회 시 금융상품판매업자는 3영업일 이내에 이미 받은 금전·재화 등을 반환해야 합니다. 다만, 철회 가능 기간은 법령에 정해진 기준에 따라 제한될 수 있으므로 구체적인 기간은 관련 규정을 확인해야 합니다.<br><br>[참고 1], [참고 3]</td>
+          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=1&cciNo=2&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법령사이트 답변</a></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">6</td>
           <td class="q-cell">제 이름이 아닌 가명으로 통장을 개설해도 되나요?</td>
-          <td class="a-cell">가명으로 통장을 개설하는 것은 금융실명거래 및 비밀보장에 관한 법률에 따라 허용되지 않습니다. 해당 법률은 모든 금융거래를 실지명의(실명)로 하도록 규정하고 있으며, 가명 또는 차명 계좌 개설은 원칙적으로 금지됩니다. 실명이 확인된 계좌는 명의자의 소유로 추정되므로, 가명 계좌는 법적 보호를 받기 어렵습니다.<br><br>가명 계좌 개설 시 금융회사 등은 실명확인을 생략할 수 없으며, 이를 위반할 경우 과태료가 부과될 수 있습니다. 또한, 가명 계좌를 이용한 금융거래는 불법·탈법 목적의 행위로 간주될 수 있어 형사처벌 대상이 될 수 있습니다. 따라서 반드시 본인의 실명으로 계좌를 개설해야 합니다.</td>
-          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=2&cciNo=1&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법률사이트 답변</a></td>
+          <td class="a-cell">가명으로 통장을 개설하는 것은 금융실명거래 및 비밀보장에 관한 법률에 따라 허용되지 않습니다. 해당 법률은 모든 금융거래를 실지명의(실명)로 하도록 규정하고 있으며, 가명 또는 차명 계좌 개설은 원칙적으로 금지됩니다. 실명이 확인된 계좌는 명의자의 소유로 추정되므로, 가명 계좌는 법적 보호를 받기 어렵습니다.<br><br>가명 계좌 개설 시 금융회사 등은 실명확인을 생략할 수 없으며, 이를 위반할 경우 과태료가 부과될 수 있습니다. 또한, 가명 계좌를 이용한 금융거래는 불법·탈법 목적의 행위로 간주될 수 있어 형사처벌 대상이 될 수 있습니다. 따라서 반드시 본인의 실명으로 계좌를 개설해야 합니다.<br><br>[참고 2], [참고 3]</td>
+          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=2&cciNo=1&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법령사이트 답변</a></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">7</td>
           <td class="q-cell">얼마 전 어머니께서 괜한 말에 속아서 돈을 받고 다른 사람에게 체크카드를 빌려주었다고 합니다. 처벌받을 수 있나요?</td>
-          <td class="a-cell">어머니께서 체크카드를 다른 사람에게 빌려준 행위는 「전자금융거래법」 제6조제3항에 따라 접근매체의 양도 등 금지 규정을 위반한 것으로 볼 수 있습니다. 해당 법률은 접근매체의 사용 및 관리에 있어 다른 법률에 특별한 규정이 없는 한 양도, 대여, 보관 등의 행위를 금지하고 있으며, 이를 위반할 경우 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해질 수 있습니다.<br><br>다만, 구체적인 처벌 여부는 해당 행위가 실제로 금융거래에 사용되었는지, 피해 발생 여부 등 여러 요소에 따라 달라질 수 있습니다. 또한, 「전자금융거래법」 제6조제2항에 따르면 금융회사 또는 전자금융업자가 접근매체를 발급할 때에는 본인 확인이 필요하지만, 이미 발급된 접근매체를 타인에게 대여하는 행위는 별도의 본인 확인 절차 없이도 금지됩니다.</td>
-          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=2&cciNo=2&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법률사이트 답변</a></td>
+          <td class="a-cell">어머니께서 체크카드를 다른 사람에게 빌려준 행위는 「전자금융거래법」 제6조제3항에 따라 접근매체의 양도 등 금지 규정을 위반한 것으로 볼 수 있습니다. 해당 법률은 접근매체의 사용 및 관리에 있어 다른 법률에 특별한 규정이 없는 한 양도, 대여, 보관 등의 행위를 금지하고 있으며, 이를 위반할 경우 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해질 수 있습니다.<br><br>다만, 구체적인 처벌 여부는 해당 행위가 실제로 금융거래에 사용되었는지, 피해 발생 여부 등 여러 요소에 따라 달라질 수 있습니다. 또한, 「전자금융거래법」 제6조제2항에 따르면 금융회사 또는 전자금융업자가 접근매체를 발급할 때에는 본인 확인이 필요하지만, 이미 발급된 접근매체를 타인에게 대여하는 행위는 별도의 본인 확인 절차 없이도 금지됩니다.<br><br>[참고 4]</td>
+          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=2&cciNo=2&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법령사이트 답변</a></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">8</td>
           <td class="q-cell">차를 사서 500만원을 12개월 할부로 갚으려고 해. 매달 얼마 내면 돼?</td>
-          <td class="a-cell">할부로 차를 구매할 경우 매달 상환해야 하는 금액은 대출 금액, 이자율, 상환 기간 등에 따라 결정됩니다. 제공된 참고 자료에는 할부 구매와 관련된 구체적인 상환 금액 계산 방법이 포함되어 있지 않습니다. 따라서 정확한 상환 금액을 안내하기 위해서는 해당 금융 상품의 이자율 및 상환 조건을 확인해야 합니다.</td>
-          <td>—</td>
+          <td class="a-cell">할부로 차를 구매할 경우 매달 상환해야 하는 금액은 대출 금액, 이자율, 상환 기간 등에 따라 결정됩니다. 제공된 참고 자료에는 할부 구매와 관련된 구체적인 상환 금액 계산 방법이 포함되어 있지 않습니다. 따라서 정확한 상환 금액을 안내하기 위해서는 해당 금융 상품의 이자율 및 상환 조건을 확인해야 합니다.<br><br>[참고 2]</td>
+          <td>미평가 답변</td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">9</td>
           <td class="q-cell">보험 청약을 취소하고 싶어요.</td>
-          <td class="a-cell">보험 청약을 취소하려면 청약철회권을 행사할 수 있습니다. 일반금융소비자는 보장성 상품의 경우 보험증권을 받은 날부터 15일과 청약을 한 날부터 30일 중 먼저 도래하는 기간 내에 청약을 철회할 수 있습니다. 철회 의사를 서면으로 표시하고 해당 기간 내에 발송하면 효력이 발생합니다.</td>
-          <td>—</td>
+          <td class="a-cell">보험 청약을 취소하려면 청약철회권을 행사할 수 있습니다. 일반금융소비자는 보장성 상품의 경우 보험증권을 받은 날부터 15일과 청약을 한 날부터 30일 중 먼저 도래하는 기간 내에 청약을 철회할 수 있습니다. 철회 의사를 서면으로 표시하고 해당 기간 내에 발송하면 효력이 발생합니다.<br><br>[참고 1], [참고 2]</td>
+          <td>미평가 답변</td>
         </tr>
       </tbody>
     </table>
@@ -455,7 +435,7 @@
       <tbody>
         <tr>
           <td class="q-cell">아는 선배의 대출권유를 받고 계약을 하긴 했는데, 도저히 제가 감당 할 여력이 안 되는 것 같습니다. 대출계약을 철회할 수 있나요?</td>
-          <td class="a-cell">대출계약을 철회할 수 있는지 여부는 계약 체결 후 일정 기간 내에 가능합니다. 「금융소비자 보호에 관한 법률」에 따라 일반금융소비자는 대출성 상품에 대해 청약철회권을 행사할 수 있으며, 철회 시 금융상품판매업자는 3영업일 이내에 이미 받은 금전·재화 등을 반환해야 합니다. 다만, 철회 가능 기간은 법령에 정해진 기준에 따라 제한될 수 있으므로 구체적인 기간은 관련 규정을 확인해야 합니다.</td>
+          <td class="a-cell">대출계약을 철회할 수 있는지 여부는 계약 체결 후 일정 기간 내에 가능합니다. 「금융소비자 보호에 관한 법률」에 따라 일반금융소비자는 대출성 상품에 대해 청약철회권을 행사할 수 있으며, 철회 시 금융상품판매업자는 3영업일 이내에 이미 받은 금전·재화 등을 반환해야 합니다. 다만, 철회 가능 기간은 법령에 정해진 기준에 따라 제한될 수 있으므로 구체적인 기간은 관련 규정을 확인해야 합니다.<br><br>[참고 1], [참고 3]</td>
           <td class="orig-cell">네, 금융상품에 가입한 후 단순한 변심의 경우에도 일정한 기간 내에 해당 계약을 철회하고, 이미 납입한 금액이 있으면 돌려받을 수 있습니다.<br><br>◇ 청약철회권 행사 기간<br>☞ 일반금융소비자가 청약철회를 할 수 있는 기간(거래 당사자 사이에 다음의 기간보다 긴 기간으로 약정한 경우에는 그 기간)은 다음과 같습니다.
             <table style="margin:10px 0;font-size:12.5px;">
               <thead><tr><th>구분</th><th>청약철회권 행사 기간</th></tr></thead>
@@ -469,22 +449,22 @@
         </tr>
         <tr>
           <td class="q-cell">제 이름이 아닌 가명으로 통장을 개설해도 되나요?</td>
-          <td class="a-cell">가명으로 통장을 개설하는 것은 금융실명거래 및 비밀보장에 관한 법률에 따라 허용되지 않습니다. 해당 법률은 모든 금융거래를 실지명의(실명)로 하도록 규정하고 있으며, 가명 또는 차명 계좌 개설은 원칙적으로 금지됩니다. 실명이 확인된 계좌는 명의자의 소유로 추정되므로, 가명 계좌는 법적 보호를 받기 어렵습니다.<br><br>가명 계좌 개설 시 금융회사 등은 실명확인을 생략할 수 없으며, 이를 위반할 경우 과태료가 부과될 수 있습니다. 또한, 가명 계좌를 이용한 금융거래는 불법·탈법 목적의 행위로 간주될 수 있어 형사처벌 대상이 될 수 있습니다. 따라서 반드시 본인의 실명으로 계좌를 개설해야 합니다.</td>
+          <td class="a-cell">가명으로 통장을 개설하는 것은 금융실명거래 및 비밀보장에 관한 법률에 따라 허용되지 않습니다. 해당 법률은 모든 금융거래를 실지명의(실명)로 하도록 규정하고 있으며, 가명 또는 차명 계좌 개설은 원칙적으로 금지됩니다. 실명이 확인된 계좌는 명의자의 소유로 추정되므로, 가명 계좌는 법적 보호를 받기 어렵습니다.<br><br>가명 계좌 개설 시 금융회사 등은 실명확인을 생략할 수 없으며, 이를 위반할 경우 과태료가 부과될 수 있습니다. 또한, 가명 계좌를 이용한 금융거래는 불법·탈법 목적의 행위로 간주될 수 있어 형사처벌 대상이 될 수 있습니다. 따라서 반드시 본인의 실명으로 계좌를 개설해야 합니다.<br><br>[참고 2], [참고 3]</td>
           <td class="orig-cell">안 됩니다. 은행, 새마을금고, 우체국 등의 금융회사는 거래자의 실지명의(이하 "실명"이라 함)로 금융거래를 해야 하며, 이를 위반하면 3천만원 이하의 과태료가 부과됩니다.<br><br>◇ 금융실명거래 원칙<br>☞ 금융회사 등은 거래자의 실지명의(이하 "실명"이라 함)로 금융거래를 해야 합니다.<br>☞ 실지명의(實地名義)'란 주민등록표에 기재된 성명 및 주민등록번호[재외국민의 경우에는 여권에 기재된 성명 및 여권번호(여권이 발급되지 않은 재외국민은 「재외국민등록법」에 의한 등록부에 기재된 성명 및 등록번호)]에 따른 명의를 말합니다.<br>☞ 이를 위반한 금융회사 등의 임원 또는 직원에게는 3천만원 이하의 과태료가 부과됩니다.<br><br>◇ 다른 사람의 실명으로 하는 금융거래 금지<br>☞ 누구든지 불법재산의 은닉, 자금세탁행위 또는 공중협박자금조달행위 및 강제집행의 면탈이나 그 밖에 탈법행위를 목적으로 다른 사람의 실명으로 금융거래를 해서는 안 됩니다.<br>☞ 이를 위반하면 5년 이하의 징역 또는 5천만원 이하의 벌금에 처해지며, 징역형과 벌금형이 병과될 수 있습니다.</td>
         </tr>
         <tr>
           <td class="q-cell">얼마 전 어머니께서 괜한 말에 속아서 돈을 받고 다른 사람에게 체크카드를 빌려주었다고 합니다. 처벌받을 수 있나요?</td>
-          <td class="a-cell">어머니께서 체크카드를 다른 사람에게 빌려준 행위는 「전자금융거래법」 제6조제3항에 따라 접근매체의 양도 등 금지 규정을 위반한 것으로 볼 수 있습니다. 해당 법률은 접근매체의 사용 및 관리에 있어 다른 법률에 특별한 규정이 없는 한 양도, 대여, 보관 등의 행위를 금지하고 있으며, 이를 위반할 경우 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해질 수 있습니다.<br><br>다만, 구체적인 처벌 여부는 해당 행위가 실제로 금융거래에 사용되었는지, 피해 발생 여부 등 여러 요소에 따라 달라질 수 있습니다. 또한, 「전자금융거래법」 제6조제2항에 따르면 금융회사 또는 전자금융업자가 접근매체를 발급할 때에는 본인 확인이 필요하지만, 이미 발급된 접근매체를 타인에게 대여하는 행위는 별도의 본인 확인 절차 없이도 금지됩니다.</td>
+          <td class="a-cell">어머니께서 체크카드를 다른 사람에게 빌려준 행위는 「전자금융거래법」 제6조제3항에 따라 접근매체의 양도 등 금지 규정을 위반한 것으로 볼 수 있습니다. 해당 법률은 접근매체의 사용 및 관리에 있어 다른 법률에 특별한 규정이 없는 한 양도, 대여, 보관 등의 행위를 금지하고 있으며, 이를 위반할 경우 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해질 수 있습니다.<br><br>다만, 구체적인 처벌 여부는 해당 행위가 실제로 금융거래에 사용되었는지, 피해 발생 여부 등 여러 요소에 따라 달라질 수 있습니다. 또한, 「전자금융거래법」 제6조제2항에 따르면 금융회사 또는 전자금융업자가 접근매체를 발급할 때에는 본인 확인이 필요하지만, 이미 발급된 접근매체를 타인에게 대여하는 행위는 별도의 본인 확인 절차 없이도 금지됩니다.<br><br>[참고 4]</td>
           <td class="orig-cell">누구든지 대가를 수수(授受)·요구 또는 약속하면서 접근매체를 대여받거나 대여하는 행위 또는 보관·전달·유통하는 행위 등을 하는 경우 「전자금융거래법」 위반으로 처벌받을 수 있습니다.<br><br>◇ 접근매체(비밀번호, 생체정보, 보안카드, 현금카드 등) 양도 등 금지<br>☞ 누구든지 접근매체를 사용 및 관리함에 있어서 다른 법률에 특별한 규정이 없는 한 다음의 행위를 해서는 안 됩니다.<br>1. 접근매체를 양도하거나 양수하는 행위<br>2. 대가를 수수(授受)·요구 또는 약속하면서 접근매체를 대여받거나 대여하는 행위 또는 보관·전달·유통하는 행위<br>3. 범죄에 이용할 목적으로 또는 범죄에 이용될 것을 알면서 접근매체를 대여받거나 대여하는 행위 또는 보관·전달·유통하는 행위<br>4. 접근매체를 질권의 목적으로 하는 행위<br>5. 위 "1."부터 "4."까지의 행위를 알선·중개·광고하거나 대가를 수수(授受)·요구 또는 약속하면서 권유하는 행위<br><br>◇ 위반 시 제재<br>☞ 이를 위반하면 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해집니다.</td>
         </tr>
       </tbody>
     </table>
   </section>
 
-  <!-- 05. AI 평가 프레임워크 -->
+  <!-- 04. AI 평가 프레임워크 -->
   <section id="framework">
-    <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title">AI 평가 프레임워크</h2></div>
-    <p class="body">아래 7개 항목을 이 프로젝트 전체에서 반복적으로 사용한 평가 기준으로 정의했습니다. 이후 시나리오 설계(06), Hallucination 원인 분석(07), Safety 설계(09) 전 구간에서 동일한 기준을 적용합니다.</p>
+    <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title">AI 평가 프레임워크</h2></div>
+    <p class="body">아래 7개 항목을 이 프로젝트 전체에서 반복적으로 사용한 평가 기준으로 정의했습니다. 이후 시나리오 설계(06), Hallucination 원인 분석(07)에 적용하고, Safety 설계(09)에서는 RAG 표준 지표(RAG Triad)로 재구성해 판정했습니다.</p>
     <table>
       <thead><tr><th>평가 항목</th><th>기준</th><th>적용</th></tr></thead>
       <tbody>
@@ -499,10 +479,10 @@
     </table>
   </section>
 
-  <!-- 06. 평가 시나리오 설계 -->
+  <!-- 05. 평가 시나리오 설계 -->
   <section id="scenarios">
-    <div class="sec-head"><span class="sec-num">06</span><h2 class="sec-title">평가 시나리오 설계</h2></div>
-    <p class="body">실제 사용자가 던질 수 있는 질문 유형을 시나리오로 분류하고, 유형별로 AI가 어떻게 반응해야 하는지 기대 동작을 먼저 정의한 뒤 테스트했습니다.</p>
+    <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title">평가 시나리오 설계</h2></div>
+    <p class="body">실제 사용자가 던질 수 있는 질문 유형을 시나리오로 분류하고, 유형별로 AI가 어떻게 반응해야 하는지 기대 동작을 먼저 정의한 뒤 테스트했습니다. (테스트 완료 = 시나리오 실행 및 기대 동작 확인, 기준선 대조 평가는 Q5~7만 수행)</p>
     <table>
       <thead><tr><th>시나리오 유형</th><th>목적</th><th>예시 질문</th><th>상태</th></tr></thead>
       <tbody>
@@ -510,7 +490,7 @@
           <td>정상 질문</td>
           <td>표준 정보 검색·답변 정확성 검증</td>
           <td>"예금자보호제도는 무엇이고, 보호 한도는 얼마인가요?" 등</td>
-          <td><span class="badge badge-pass">✓ 테스트 완료 (5건)</span></td>
+          <td><span class="badge badge-pass">✓ 테스트 완료</span></td>
         </tr>
         <tr>
           <td>포괄적 질문</td>
@@ -552,10 +532,10 @@
     </table>
   </section>
 
-  <!-- 07. 평가 결과 & Hallucination 원인 분석 -->
+  <!-- 06. 평가 결과 & Hallucination 원인 분석 -->
   <section id="hallucination">
-    <div class="sec-head"><span class="sec-num">07</span><h2 class="sec-title">평가 결과 & Hallucination 원인 분석</h2></div>
-    <p class="body">이 프로젝트의 핵심은 <strong>왜 틀렸는지를 계층별로 진단한 것</strong>입니다. 국가법령정보센터 100문 100답 공식 답변을 기준으로 실제 생성 답변을 대조해, 발견된 오류를 5가지 유형으로 분류했습니다.</p>
+    <div class="sec-head"><span class="sec-num">06</span><h2 class="sec-title">평가 결과 & Hallucination 원인 분석</h2></div>
+    <p class="body">이 프로젝트의 핵심은 <strong>왜 틀렸는지를 계층별로 진단한 것</strong>입니다. 생활법령정보 사이트의 100문 100답 공식 답변을 기준으로 실제 생성 답변을 대조해, 발견된 오류를 5가지 유형으로 분류했습니다.</p>
 
     <p style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">유형 분류</p>
     <table>
@@ -598,7 +578,7 @@
       <div class="case-head"><span class="qn">Q5</span><span style="color:var(--signal-dim);font-family:var(--mono);font-size:11px;">[Retrieval Failure]</span>ㅤ대출계약을 철회할 수 있나요? — "14일"이 사라졌다</div>
       <div class="case-row">
         <div>정확성</div>
-        <div><span class="badge badge-pass">✓ 양호</span>ㅤ청약철회권의 존재와 근거 법률(「금융소비자 보호에 관한 법률」) 정확. 단 "철회 시 3영업일 이내 반환"은 근거 표 기준 기산점이 부정확 — 대출성 상품은 <strong>소비자로부터 금전·재화를 반환받은 날부터</strong> 3영업일</div>
+        <div><span class="badge badge-warn">⚠ 부분충족</span>ㅤ청약철회권의 존재와 근거 법률(「금융소비자 보호에 관한 법률」) 정확. 단 "철회 시 3영업일 이내 반환"은 참고 자료 표 기준 기산점이 부정확 — 대출성 상품은 <strong>소비자로부터 금전·재화를 반환받은 날부터</strong> 3영업일</div>
       </div>
       <div class="case-row">
         <div>완전성</div>
@@ -635,7 +615,7 @@
     </div>
 
     <div class="case">
-      <div class="case-head"><span class="qn">Q7</span><span style="color:var(--signal-dim);font-family:var(--mono);font-size:11px;">[Ranking Failure]</span>ㅤ돈을 받고 체크카드를 빌려줬다면? — 결론은 맞지만 요건을 놓쳤다</div>
+      <div class="case-head"><span class="qn">Q7</span><span style="color:var(--signal-dim);font-family:var(--mono);font-size:11px;">[Ranking + Grounding Failure]</span>ㅤ돈을 받고 체크카드를 빌려줬다면? — 결론은 맞지만 요건을 놓쳤다</div>
       <div class="case-row">
         <div>정확성</div>
         <div><span class="badge badge-pass">✓ 양호</span>ㅤ처벌 수위(<strong>5년 이하 징역 또는 3천만원 이하 벌금</strong>)가 원문과 일치, 결론 정확</div>
@@ -659,10 +639,10 @@
     </div>
   </section>
 
-  <!-- 08. Prompt Engineering -->
+  <!-- 07. Prompt Engineering -->
   <section id="prompt">
-    <div class="sec-head"><span class="sec-num">08</span><h2 class="sec-title">Prompt Engineering — 개선 프로세스</h2></div>
-    <p class="body">위 07에서 드러난 Grounding Failure · Prompt Failure를 프롬프트 개선으로 해결한 사이클입니다. 한 번에 고치지 않고, 답변 분석 → 문제 발견 → 수정 → 재평가를 반복했습니다.</p>
+    <div class="sec-head"><span class="sec-num">07</span><h2 class="sec-title">Prompt Engineering — 개선 프로세스</h2></div>
+    <p class="body">위 06에서 드러난 Grounding Failure · Prompt Failure를 프롬프트 개선으로 해결한 사이클입니다. 한 번에 고치지 않고, 답변 분석 → 문제 발견 → 수정 → 재평가를 반복했습니다.</p>
     <div class="pipe">
       <div class="stage">
         <div class="n">STEP 1</div><div class="t">답변 분석</div>
@@ -687,9 +667,9 @@
     </div>
   </section>
 
-  <!-- 09. Safety 설계 -->
+  <!-- 08. Safety 설계 -->
   <section id="safety">
-    <div class="sec-head"><span class="sec-num">09</span><h2 class="sec-title">Safety 설계</h2></div>
+    <div class="sec-head"><span class="sec-num">08</span><h2 class="sec-title">Safety 설계</h2></div>
     <p class="body">금융 도메인에서 발생 가능한 리스크를 먼저 정의하고, 이를 탐지·완화·검증하는 흐름으로 설계했습니다.</p>
     <div class="pipe">
       <div class="stage">
@@ -746,9 +726,9 @@
     </table>
   </section>
 
-  <!-- 10. 다음 단계 -->
+  <!-- 09. 다음 단계 -->
   <section id="roadmap">
-    <div class="sec-head"><span class="sec-num">10</span><h2 class="sec-title">다음 단계 — 정량 검증 로드맵</h2></div>
+    <div class="sec-head"><span class="sec-num">09</span><h2 class="sec-title">다음 단계 — 정량 검증 로드맵</h2></div>
     <p class="body">현재 평가는 정적 분석과 수동 사례 대조 기반입니다. "신뢰할 수 있다"를 주장이 아닌 측정으로 바꾸기 위해, 검색과 생성을 분리해 다음 순서로 정량화합니다.</p>
     <table>
       <thead><tr><th>단계</th><th>검증 방법</th><th>지표</th><th>상태</th></tr></thead>
@@ -781,9 +761,9 @@
     </table>
   </section>
 
-  <!-- 11. 담당 업무 -->
+  <!-- 10. 수행 내용 -->
   <section id="role">
-    <div class="sec-head"><span class="sec-num">11</span><h2 class="sec-title">수행 내용</h2></div>
+    <div class="sec-head"><span class="sec-num">10</span><h2 class="sec-title">수행 내용</h2></div>
     <div class="features">
       <div class="feature-card">
         <h3>평가 기준 정의</h3>
