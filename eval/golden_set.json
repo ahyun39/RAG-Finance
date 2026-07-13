@@ -1,0 +1,234 @@
+[
+  {
+    "id": "law-01",
+    "type": "legal_term",
+    "question": "금융소비자 보호에 관한 법률에서 정한 청약철회권이란 무엇인가요?",
+    "answer_chunk_ids": [
+      6
+    ]
+  },
+  {
+    "id": "law-02",
+    "type": "legal_term",
+    "question": "청약이 철회된 경우 금융상품판매업자가 소비자에게서 받은 금전이나 재화는 어떤 방법으로 반환해야 하나요?",
+    "answer_chunk_ids": [
+      7,
+      9
+    ]
+  },
+  {
+    "id": "law-03",
+    "type": "legal_term",
+    "question": "위법계약의 해지를 요구하려면 어떤 절차를 거쳐야 하나요?",
+    "answer_chunk_ids": [
+      12,
+      13
+    ]
+  },
+  {
+    "id": "law-04",
+    "type": "legal_term",
+    "question": "예금보험공사의 예금보험금 지급 절차는 어떻게 진행되나요?",
+    "answer_chunk_ids": [
+      38,
+      39,
+      40
+    ]
+  },
+  {
+    "id": "law-05",
+    "type": "legal_term",
+    "question": "예금자보호법에 따라 예금보호를 받는 부보금융회사에는 어떤 기관들이 포함되나요?",
+    "answer_chunk_ids": [
+      34,
+      35
+    ]
+  },
+  {
+    "id": "law-06",
+    "type": "legal_term",
+    "question": "은행에 대출 금리인하를 요구할 수 있는 요건은 무엇인가요?",
+    "answer_chunk_ids": [
+      16,
+      17
+    ]
+  },
+  {
+    "id": "law-07",
+    "type": "legal_term",
+    "question": "착오송금 반환지원제도란 어떤 제도인가요?",
+    "answer_chunk_ids": [
+      26
+    ]
+  },
+  {
+    "id": "law-08",
+    "type": "legal_term",
+    "question": "전자금융거래법상 접근매체의 양도·양수는 금지되어 있나요?",
+    "answer_chunk_ids": [
+      22
+    ]
+  },
+  {
+    "id": "law-09",
+    "type": "legal_term",
+    "question": "휴면예금등이란 무엇이고 어떻게 조회할 수 있나요?",
+    "answer_chunk_ids": [
+      32
+    ]
+  },
+  {
+    "id": "law-10",
+    "type": "legal_term",
+    "question": "금융감독원 금융분쟁조정위원회의 분쟁조정 절차는 어떻게 진행되나요?",
+    "answer_chunk_ids": [
+      45,
+      46,
+      47
+    ]
+  },
+  {
+    "id": "col-01",
+    "type": "colloquial",
+    "question": "예금이나 적금 등, 금융상품을 한 번에 비교할 수 있는 방법이 있나요?",
+    "answer_chunk_ids": [
+      0,
+      2
+    ]
+  },
+  {
+    "id": "col-02",
+    "type": "colloquial",
+    "question": "아는 선배의 대출권유를 받고 계약을 하긴 했는데, 도저히 제가 감당 할 여력이 안 되는 것 같습니다. 대출계약을 철회할 수 있나요?",
+    "answer_chunk_ids": [
+      6,
+      8
+    ]
+  },
+  {
+    "id": "col-03",
+    "type": "colloquial",
+    "question": "금융회사 직원의 설명과 실제 내용이 다른 경우 가입한 펀드를 해지할 수 있나요?",
+    "answer_chunk_ids": [
+      10
+    ]
+  },
+  {
+    "id": "col-04",
+    "type": "colloquial",
+    "question": "승진을 해서 신용상태가 개선된 경우 대출이자를 낮춰달라고 요구할 수 있나요?",
+    "answer_chunk_ids": [
+      16,
+      17
+    ]
+  },
+  {
+    "id": "col-05",
+    "type": "colloquial",
+    "question": "제 이름이 아닌 가명으로 통장을 개설해도 되나요?",
+    "answer_chunk_ids": [
+      18
+    ]
+  },
+  {
+    "id": "col-06",
+    "type": "colloquial",
+    "question": "얼마 전 어머니께서 괜한 말에 속아서 돈을 받고 다른 사람에게 체크카드를 빌려주었다고 합니다. 처벌받을 수 있나요?",
+    "answer_chunk_ids": [
+      22
+    ]
+  },
+  {
+    "id": "col-07",
+    "type": "colloquial",
+    "question": "어머니께서 2026년 3월에 3천만원을 송금해야 하는데 7천만원을 송금을 했다고 합니다. 돌려받을 수 있을까요?",
+    "answer_chunk_ids": [
+      26,
+      27
+    ]
+  },
+  {
+    "id": "col-08",
+    "type": "colloquial",
+    "question": "여러 금융회사에 있는 휴면예금을 한 번에 확인할 수 있는 방법이 있나요?",
+    "answer_chunk_ids": [
+      32
+    ]
+  },
+  {
+    "id": "col-09",
+    "type": "colloquial",
+    "question": "주거래 은행에 6천만원 정기예금을 가입했는데, 그 은행이 파산했다고 합니다. 원금을 돌려받을 수 있나요?",
+    "answer_chunk_ids": [
+      37
+    ]
+  },
+  {
+    "id": "col-10",
+    "type": "colloquial",
+    "question": "금융분쟁조정을 신청했는데 보험회사의 조치가 너무 부당한거 같습니다. 추가로 소송 지원을 받을 수 있나요?",
+    "answer_chunk_ids": [
+      48
+    ]
+  },
+  {
+    "id": "na-01",
+    "type": "no_answer",
+    "question": "주택청약종합저축에 가입하려면 어떤 자격이 필요한가요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-02",
+    "type": "no_answer",
+    "question": "전세자금대출을 받으려면 어떤 조건을 충족해야 하나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-03",
+    "type": "no_answer",
+    "question": "비트코인 같은 가상자산 투자 수익에는 세금이 어떻게 부과되나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-04",
+    "type": "no_answer",
+    "question": "빚이 너무 많아서 갚기 어려운데 개인회생은 어떻게 신청하나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-05",
+    "type": "no_answer",
+    "question": "보이스피싱으로 송금한 돈은 어떻게 환급받을 수 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-06",
+    "type": "no_answer",
+    "question": "신용점수를 올리려면 어떻게 해야 하나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-07",
+    "type": "no_answer",
+    "question": "신용카드 할부로 산 물건에 하자가 있으면 남은 할부금 지급을 거절할 수 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-08",
+    "type": "no_answer",
+    "question": "퇴직연금을 중도에 인출할 수 있는 요건은 무엇인가요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-09",
+    "type": "no_answer",
+    "question": "연말정산에서 소득공제를 받을 수 있는 금융상품에는 어떤 것이 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-10",
+    "type": "no_answer",
+    "question": "주식 공매도는 누구나 할 수 있나요?",
+    "answer_chunk_ids": []
+  }
+]
