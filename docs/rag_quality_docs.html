@@ -474,7 +474,7 @@
         <tr><td>Hallucination</td><td>없는 정보를 생성하지 않았는가</td><td>5개 유형으로 분류해 원인 추적</td></tr>
         <tr><td>Safety</td><td>금융 리스크가 있는 답변인가</td><td> 방어 레이어로 완화</td></tr>
         <tr><td>Citation</td><td>출처를 제공했는가</td><td>[참고 N] 인용 강제 + 원본 청크 노출</td></tr>
-        <tr><td>Refusal</td><td>답변하면 안 되는 질문을 거부하는가</td><td>범위 밖 질문 비답변 처리 확인</td></tr>
+        <tr><td>Refusal</td><td>답변하면 안 되는 질문을 거부하는가</td><td>무정답 골든셋 10문항으로 정량 측정 — 거부 정확성 0.2로 한계 확인(2026-07-13), 개선 대상</td></tr>
       </tbody>
     </table>
   </section>
@@ -507,8 +507,8 @@
         <tr>
           <td>범위 밖 질문</td>
           <td>코퍼스에 없는 계산·정보 요구 시 거부가 정확한지 검증</td>
-          <td>"차 500만원 12개월 할부, 매달 얼마 내면 돼?"</td>
-          <td><span class="badge badge-pass">✓ 테스트 완료</span></td>
+          <td>"주택청약종합저축에 가입하려면 어떤 자격이 필요한가요?"</td>
+          <td><span class="badge badge-warn">⚠ 한계 확인</span> 수동 사례는 통과했으나 무정답 골든셋 정량 측정에서 거부 정확성 2/10 (2026-07-13)</td>
         </tr>
         <tr>
           <td>모호한 질문</td>
@@ -562,8 +562,8 @@
         <tr>
           <td class="layer g">Missing Context</td>
           <td>관련 근거가 없을 때 그럴듯한 오답을 생성할 위험</td>
-          <td>사전 방지 대상</td>
-          <td class="fix">유사도 임계값 필터(0.5) — 적용 완료</td>
+          <td>무정답 질문 10건 중 8건에서 무관 청크가 임계값 통과</td>
+          <td class="fix">유사도 임계값 필터(0.5) 적용 — 단독으로는 불충분함을 정량 확인, 검색 분별력 개선(청킹·하이브리드)으로 보완 예정</td>
         </tr>
         <tr>
           <td class="layer g">Prompt Failure</td>
@@ -678,7 +678,7 @@
       </div>
       <div class="stage">
         <div class="n">DETECTION</div><div class="t">탐지</div>
-        <div class="d">유사도 임계값(0.5) 미달 컨텍스트 식별, 범위 벗어난 질문 자동 식별</div>
+        <div class="d">유사도 임계값(0.5) 미달 컨텍스트 차단 — 골든셋 측정 결과 무관 질문의 거부는 2/10에 그쳐 임계값 단독 탐지로는 불충분함을 확인</div>
       </div>
       <div class="stage">
         <div class="n">MITIGATION</div><div class="t">완화</div>
@@ -686,7 +686,7 @@
       </div>
       <div class="stage">
         <div class="n">VERIFICATION</div><div class="t">검증</div>
-        <div class="d">골든 데이터셋 기반 Recall@5·MRR·Faithfulness 정량 검증 — 다음 단계</div>
+        <div class="d">골든셋 30문항 기반 Recall@5·MRR·전달률·거부 정확성 측정 완료. Faithfulness 검증은 다음 단계</div>
       </div>
     </div>
     <div class="callout" style="margin-top:14px;">
@@ -705,7 +705,7 @@
         <tr>
           <td>Context Precision (검색 정밀도)</td>
           <td><span class="badge badge-warn">⚠ 부분충족</span></td>
-          <td>버그 식별 → 수정 완료(2026-07): 유사도 임계값(0.5) 이상 청크만 LLM 컨텍스트로 전달, 관련 청크가 없으면 답변 생성 자체를 건너뜀.</td>
+          <td>버그 식별 → 수정 완료(2026-07): 유사도 임계값(0.5) 이상 청크만 LLM 컨텍스트로 전달, 관련 청크가 없으면 답변 생성 자체를 건너뜀. 골든셋 측정: Recall@5 0.817 · MRR 0.642 · 전달률 0.667 — 구어체 질문에서 정답 청크가 검색되고도 임계값에 걸려 전달되지 않는 사례 확인</td>
         </tr>
         <tr>
           <td>Answer Relevance (답변 관련성)</td>
@@ -729,15 +729,15 @@
   <!-- 09. 다음 단계 -->
   <section id="roadmap">
     <div class="sec-head"><span class="sec-num">09</span><h2 class="sec-title">다음 단계 — 정량 검증 로드맵</h2></div>
-    <p class="body">현재 평가는 정적 분석과 수동 사례 대조 기반입니다. "신뢰할 수 있다"를 주장이 아닌 측정으로 바꾸기 위해, 검색과 생성을 분리해 다음 순서로 정량화합니다.</p>
+    <p class="body">정적 분석과 수동 사례 대조에서 출발해, 검색 단계는 골든셋 기반 정량 측정까지 완료했습니다(2026-07-13). "신뢰할 수 있다"를 주장이 아닌 측정으로 바꾸기 위해, 검색과 생성을 분리해 다음 순서로 정량화합니다.</p>
     <table>
       <thead><tr><th>단계</th><th>검증 방법</th><th>지표</th><th>상태</th></tr></thead>
       <tbody>
         <tr>
           <td class="layer r">검색 (Retrieval)</td>
-          <td>100문 100답의 (질문, 정답 청크, 공식 답변) 골든셋을 구축해 정답 청크가 상위 k개에 검색되는지 대조 — LLM 호출 없이 결정론적으로 측정</td>
-          <td><code>Recall@5</code> · <code>MRR</code></td>
-          <td>다음 단계</td>
+          <td>골든셋 30문항(법령 용어 10 · 100문 100답 기반 구어체 10 · 무정답 10)으로 정답 청크가 상위 k개에 검색되는지 대조 — LLM 호출 없이 결정론적으로 측정 (<code>eval/run_eval.py</code>)</td>
+          <td><code>Recall@5</code> · <code>MRR</code> · 전달률</td>
+          <td>완료 — 베이스라인 Recall@5 0.817 / MRR 0.642 / 전달률 0.667</td>
         </tr>
         <tr>
           <td class="layer g">생성 (Generation)</td>
@@ -749,13 +749,13 @@
           <td class="layer g">도메인 특화</td>
           <td>답변과 근거 청크의 금액·기간·비율을 정규식 대조, [참고 N] 인용 번호 무결성 검증, 코퍼스 밖 질문에 대한 거부 정확성 측정</td>
           <td>수치 일치율 · 거부율</td>
-          <td>계획</td>
+          <td>거부 정확성 측정 완료 — 0.200. 수치 대조·인용 무결성은 계획</td>
         </tr>
         <tr>
           <td class="layer r">회귀 방지</td>
-          <td>프롬프트·청킹·검색 변경 시 골든셋 평가를 자동 재실행해 지표 하락 여부 확인</td>
+          <td>프롬프트·청킹·검색 변경 시 골든셋 평가를 재실행해 지표 하락 여부 확인</td>
           <td>변경 전후 지표 비교</td>
-          <td>계획</td>
+          <td>실행 수단 확보 — <code>eval/run_eval.py</code> 재실행으로 전후 비교 가능.</td>
         </tr>
       </tbody>
     </table>
