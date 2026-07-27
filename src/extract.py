@@ -3,18 +3,29 @@ import os
 
 TEXT_TYPES = ("heading", "text", "note")
 
-
 def extract_sections(law_data):
     records = []
     for doc in law_data:
         for section in doc["sections"]:
-            texts = [b["text"] for b in section["body"] if b["type"] in TEXT_TYPES]
-            tables = [b["rows"] for b in section["body"] if b["type"] == "table"]
-            records.append({
-                "section_title": section["title"],
-                "content": "\n".join(texts),
-                "tables": tables,
-            })
+            cur = None
+            for b in section["body"]:
+                # heading을 만나면 새 블록 시작 (heading 없이 시작하는 body는 빈 heading으로)
+                if b["type"] == "heading" or cur is None:
+                    cur = {
+                        "section_title": section["title"],
+                        "heading": b["text"] if b["type"] == "heading" else "",
+                        "content": [],
+                        "tables": [],
+                    }
+                    records.append(cur)
+                if b["type"] in ("text", "note"):
+                    cur["content"].append(b["text"])
+                elif b["type"] == "table":
+                    cur["tables"].append(b["rows"])
+
+    records = [r for r in records if r["content"] or r["tables"]]
+    for r in records:
+        r["content"] = "\n".join(r["content"])
     return records
 
 
