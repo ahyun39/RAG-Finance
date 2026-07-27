@@ -105,6 +105,8 @@ def chunk_all_sections(input_json="text_sections.json", output_json="chunks.json
 
     for item in data:
         section_title = item["section_title"]
+        if item.get("heading"):
+            section_title = f"{section_title} : {item['heading']}" 
         content = item.get("content", "")
         tables = item.get("tables", [])
 
