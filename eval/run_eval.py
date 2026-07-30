@@ -21,7 +21,7 @@ from vector_search import MODEL_NAME, load_index, load_meta, search
 
 GOLDEN_SET_FILE = "eval/golden_set.json"
 TOP_K = 5
-SIMILARITY_THRESHOLD = 0.5  # app.py의 값과 반드시 일치해야 함
+SIMILARITY_THRESHOLD = 0.55  # app.py의 값과 반드시 일치해야 함
 
 
 def evaluate(golden, model, index, meta):

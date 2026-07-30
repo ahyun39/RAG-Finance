@@ -1,16 +1,16 @@
 """
 chunks.json -> 벡터 임베딩 생성
 
-- 모델: jhgan/ko-sroberta-multitask (한국어 특화 sentence-transformers)
+- 모델: nlpai-lab/KURE-v1 (한국어 특화 sentence-transformers)
 - chunk_title + chunk_content를 합쳐 임베딩 (제목의 의미 정보도 함께 반영)
-- 결과: embeddings.npy (벡터 배열) + chunks_with_embedding_meta.json (chunk 메타정보, 임베딩과 순서 동일)
+- 결과: embeddings.npy (벡터 배열) + chunks_meta.json (chunk 메타정보, 임베딩과 순서 동일)
 """
 
 import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-MODEL_NAME = "jhgan/ko-sroberta-multitask"
+MODEL_NAME = "nlpai-lab/KURE-v1"
 
 INPUT_JSON = "data/chunks.json"
 EMBEDDING_OUTPUT = "index/embeddings.npy"
@@ -49,15 +49,19 @@ def main():
     np.save(EMBEDDING_OUTPUT, embeddings)
 
     # 메타정보 저장 (임베딩과 같은 순서로 chunk_id, chunk_title, chunk_content 보존)
-    meta = [
-        {
+    meta = []
+    for c in chunks:
+        m = {
             "chunk_id": c["chunk_id"],
             "chunk_title": c["chunk_title"],
             "chunk_content": c["chunk_content"],
             "chunk_length": c.get("chunk_length", len(c["chunk_content"])),
         }
-        for c in chunks
-    ]
+        # 표 조각 식별 정보는 표 청크에만 존재하므로 있을 때만 전달
+        for k in ("table_group", "part", "part_total"):
+            if k in c:
+                m[k] = c[k]
+        meta.append(m)
     with open(META_OUTPUT, "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
 

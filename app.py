@@ -20,12 +20,12 @@ import faiss
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
 
-MODEL_NAME = "jhgan/ko-sroberta-multitask"
+MODEL_NAME = "nlpai-lab/KURE-v1"
 UPSTAGE_MODEL = "solar-pro3"
 UPSTAGE_BASE_URL = "https://api.upstage.ai/v1"
 INDEX_FILE = "index/faiss_index.bin"
 META_FILE = "data/chunks_meta.json"
-SIMILARITY_THRESHOLD = 0.5
+SIMILARITY_THRESHOLD = 0.55
 
 st.set_page_config(
     page_title="금융 법령 정보 검색",
@@ -56,6 +56,13 @@ def load_llm_client():
 
 
 def search(query, model, index, meta, top_k=5):
+    # FAISS 행 번호로 meta를 조회하므로 둘의 개수·순서가 어긋나면 안 된다.
+    # meta가 더 길면 예외 없이 '엉뚱한 청크'가 조용히 반환된다. (src/vector_search.py에도 같은 가드)
+    assert index.ntotal == len(meta), (
+        f"인덱스({index.ntotal})와 메타({len(meta)})의 개수가 다릅니다. "
+        "embedding.py -> vector_search.py를 다시 실행해 함께 재생성하세요."
+    )
+
     query_vec = model.encode(
         [query],
         convert_to_numpy=True,

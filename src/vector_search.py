@@ -10,7 +10,7 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 
-MODEL_NAME = "jhgan/ko-sroberta-multitask"
+MODEL_NAME = "nlpai-lab/KURE-v1"
 
 EMBEDDING_FILE = "index/embeddings.npy"
 META_FILE = "data/chunks_meta.json"
@@ -45,6 +45,13 @@ def load_meta(meta_file=META_FILE):
 
 def search(query, model, index, meta, top_k=5):
     """쿼리 텍스트로 유사한 chunk를 top_k개 검색"""
+    # FAISS가 돌려준 행 번호로 meta를 조회하므로 둘의 개수·순서가 어긋나면 안 된다.
+    # meta가 더 길면 예외 없이 '엉뚱한 청크'가 조용히 반환되므로 여기서 막는다.
+    assert index.ntotal == len(meta), (
+        f"인덱스({index.ntotal})와 메타({len(meta)})의 개수가 다릅니다. "
+        "embedding.py -> vector_search.py를 다시 실행해 함께 재생성하세요."
+    )
+
     query_vec = model.encode(
         [query],
         convert_to_numpy=True,
