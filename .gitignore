@@ -1,5 +1,9 @@
-docs/evaluation.md
 docs/feedback.md
-docs/search_improvement.md
+docs/next_actions.md
 docs/portfolio.html
 docs/rag_portfolio.html
+
+.DS_Store
+__pycache__/
+*.pyc
+venv/
