@@ -196,6 +196,72 @@
     "reference_source": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=4&cciNo=1&cnpClsNo=1&menuType=onhunqna&search_put="
   },
   {
+    "id": "st-01",
+    "type": "statute_ref",
+    "question": "「예금자보호법」 제39조의2는 어떤 제도를 규정하고 있나요?",
+    "answer_chunk_ids": [
+      42
+    ]
+  },
+  {
+    "id": "st-02",
+    "type": "statute_ref",
+    "question": "「전자금융거래법」 제6조의3에서 금지하는 행위는 무엇인가요?",
+    "answer_chunk_ids": [
+      36
+    ]
+  },
+  {
+    "id": "st-03",
+    "type": "statute_ref",
+    "question": "「금융소비자 보호에 관한 법률」 제39조에 따른 조정의 효력은 무엇인가요?",
+    "answer_chunk_ids": [
+      74
+    ]
+  },
+  {
+    "id": "st-04",
+    "type": "statute_ref",
+    "question": "「전자금융거래법」 제49조제4항을 위반하면 어떤 처벌을 받나요?",
+    "answer_chunk_ids": [
+      35,
+      37
+    ]
+  },
+  {
+    "id": "st-05",
+    "type": "statute_ref",
+    "question": "「금융실명거래 및 비밀보장에 관한 법률」 제6조에 따른 제재 내용은?",
+    "answer_chunk_ids": [
+      30,
+      32
+    ]
+  },
+  {
+    "id": "st-06",
+    "type": "statute_ref",
+    "question": "「은행법」 제30조의2에 따라 금리인하를 요구할 수 있는 요건은?",
+    "answer_chunk_ids": [
+      23
+    ]
+  },
+  {
+    "id": "st-07",
+    "type": "statute_ref",
+    "question": "「금융소비자 보호에 관한 법률」 제40조는 시효중단에 관해 무엇을 정하고 있나요?",
+    "answer_chunk_ids": [
+      75
+    ]
+  },
+  {
+    "id": "st-08",
+    "type": "statute_ref",
+    "question": "제39조의2제1항에 근거한 신청은 어느 기관에 해야 하나요?",
+    "answer_chunk_ids": [
+      44
+    ]
+  },
+  {
     "id": "na-01",
     "type": "no_answer",
     "question": "주택청약종합저축에 가입하려면 어떤 자격이 필요한가요?",
@@ -253,6 +319,114 @@
     "id": "na-10",
     "type": "no_answer",
     "question": "주식 공매도는 누구나 할 수 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-11",
+    "type": "no_answer",
+    "question": "외화예금도 예금자보호 대상에 포함되나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-12",
+    "type": "no_answer",
+    "question": "예금자보호 한도를 초과한 금액은 파산 배당으로 돌려받을 수 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-13",
+    "type": "no_answer",
+    "question": "휴면예금을 끝까지 찾아가지 않으면 국고로 귀속되나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-14",
+    "type": "no_answer",
+    "question": "접근매체를 분실했을 때 재발급 수수료는 얼마인가요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-15",
+    "type": "no_answer",
+    "question": "금융회사가 예금보험공사에 내는 예금보험료율은 얼마인가요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-16",
+    "type": "no_answer",
+    "question": "미성년자가 예금계좌를 개설할 때 법정대리인 동의가 필요한가요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-17",
+    "type": "no_answer",
+    "question": "사망한 가족의 예금을 상속받으려면 어떤 절차를 거쳐야 하나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-18",
+    "type": "no_answer",
+    "question": "금리인하 요구가 거절되면 금융감독원에 이의를 제기할 수 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-19",
+    "type": "no_answer",
+    "question": "해외로 잘못 송금한 경우에도 착오송금 반환지원제도를 이용할 수 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-20",
+    "type": "no_answer",
+    "question": "실손의료보험 보험금은 어떻게 청구하나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-21",
+    "type": "no_answer",
+    "question": "ISA 계좌의 비과세 한도는 얼마인가요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-22",
+    "type": "no_answer",
+    "question": "적립식 펀드와 거치식 펀드는 어떤 차이가 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-23",
+    "type": "no_answer",
+    "question": "자동차보험 의무가입 대상은 누구인가요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-24",
+    "type": "no_answer",
+    "question": "신용회복위원회의 채무조정은 어떤 절차로 진행되나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-25",
+    "type": "no_answer",
+    "question": "국민연금 보험료율은 몇 퍼센트인가요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-26",
+    "type": "no_answer",
+    "question": "DSR 규제로 대출한도가 어떻게 제한되나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-27",
+    "type": "no_answer",
+    "question": "마이데이터 서비스에 가입하면 어떤 정보를 볼 수 있나요?",
+    "answer_chunk_ids": []
+  },
+  {
+    "id": "na-28",
+    "type": "no_answer",
+    "question": "오픈뱅킹으로 다른 은행 계좌를 조회하려면 어떻게 해야 하나요?",
     "answer_chunk_ids": []
   }
 ]
