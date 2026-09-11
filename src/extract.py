@@ -1,8 +1,6 @@
 import json
 import os
 
-TEXT_TYPES = ("heading", "text", "note")
-
 def extract_sections(law_data):
     records = []
     for doc in law_data:
@@ -39,4 +37,4 @@ if __name__ == "__main__":
     with open("data/text_sections.json", "w", encoding="utf-8") as f:
         json.dump(records, f, ensure_ascii=False, indent=2)
 
-    print(f"저장 완료: data/text_sections.json (총 {len(records)}개 섹션)")
+    print(f"저장 완료: data/text_sections.json (총 {len(records)}개 레코드)")

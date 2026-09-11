@@ -10,11 +10,9 @@ import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-MODEL_NAME = "nlpai-lab/KURE-v1"
+from config import MODEL_NAME, EMBEDDING_FILE as EMBEDDING_OUTPUT, META_FILE as META_OUTPUT
 
 INPUT_JSON = "data/chunks.json"
-EMBEDDING_OUTPUT = "index/embeddings.npy"
-META_OUTPUT = "data/chunks_meta.json"
 
 
 def build_embedding_text(chunk):
