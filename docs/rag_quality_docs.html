@@ -150,7 +150,7 @@
   table{width:100%;border-collapse:collapse;font-size:14px;border:1.5px solid var(--ink);}
   th{background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:11px;
     letter-spacing:.06em;text-transform:uppercase;text-align:left;padding:11px 14px;font-weight:600;}
-  td{padding:11px 14px;border-bottom:1px solid var(--hair);vertical-align:top;}
+  td{padding:11px 14px;border-bottom:1px solid var(--hair);vertical-align:top;word-break:keep-all;}
   tr:last-child td{border-bottom:none;}
   td.layer{font-family:var(--mono);font-size:12px;font-weight:600;}
   td.layer.r{color:var(--signal);}
@@ -161,6 +161,24 @@
   td.q-cell{font-weight:600;color:var(--ink);background:#fff;border-right:1px solid var(--hair);}
   td.a-cell{color:#2a313c;border-right:1px solid var(--hair);}
   td.rag-cell{background:rgba(20,82,240,.05);border-right:1px solid var(--hair);}
+  /* 상태 셀 — 배지 / 결론 / 부연을 줄로 분리 */
+  td.state{line-height:1.55;vertical-align:top;}
+  td.state .badge{margin-bottom:7px;}
+  td.state .hl{display:block;font-weight:600;color:var(--ink);font-size:13px;margin-bottom:5px;}
+  td.state .note{display:block;font-size:12.5px;color:#4a525f;line-height:1.6;}
+  /* 유사도 칩 */
+  td.sim{vertical-align:top;line-height:1.6;}
+  td.sim .chips{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:9px;}
+  td.sim .chips .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:2px;}
+  td.sim .c{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:3px;background:#eef3ff;color:#2f4a8a;border:1px solid #d4e0f7;}
+  td.sim .c.top{background:#d3e2ff;border-color:#9fbdf0;font-weight:700;color:#1c3773;}
+  td.sim .c.lo{background:#f5f5f5;color:#a3a8b0;border-color:#e6e6e6;}
+  td.sim .hl{display:block;font-weight:600;color:var(--ink);font-size:13px;margin-bottom:5px;}
+  td.sim .note{display:block;font-family:var(--display);font-size:12.5px;color:#4a525f;line-height:1.6;}
+  .simlegend{font-size:12px;color:var(--muted);margin:0 0 10px;}
+  .simlegend .c{font-family:var(--mono);font-size:10.5px;padding:1px 5px;border-radius:3px;border:1px solid #d4e0f7;background:#eef3ff;color:#2f4a8a;}
+  .simlegend .c.top{background:#d3e2ff;border-color:#9fbdf0;font-weight:700;}
+  .simlegend .c.lo{background:#f5f5f5;color:#a3a8b0;border-color:#e6e6e6;}
   td.orig-cell{background:rgba(232,115,12,.06);}
   th.th-divide{border-right:1px solid rgba(246,244,238,.25);}
   td a{color:var(--signal);text-decoration:none;border-bottom:1px solid var(--signal-dim);}
@@ -258,7 +276,7 @@
   <header class="hero">
     <div class="kicker">Portfolio</div>
     <h1>금융 AI 답변의 신뢰성을 검증하는<br><span class="em">AI 서비스 품질 평가</span></h1>
-    <p class="lede">시스템이 생성한 일부 답변을 얼마나 신뢰할 수 있는지 <strong>평가 기준을 세워 검증하고 Hallucination의 원인을 계층별로 진단 및 개선</strong>한 프로젝트입니다. 금융·법률 도메인에서 "그럴듯한 오답"은 오류가 아니라 사고로 이어질 수 있다는 문제의식에서 출발했습니다.</p>
+    <p class="lede">시스템이 생성한 답변을 얼마나 신뢰할 수 있는지 <strong>평가 기준을 세워 검증하고 Hallucination의 원인을 계층별로 진단 및 개선</strong>한 프로젝트입니다. 금융·법률 도메인에서 "그럴듯한 오답"은 오류가 아니라 사고로 이어질 수 있다는 문제의식에서 출발했습니다. 수동 대조로 원인 유형을 잡은 뒤 <strong>골든셋 56문항 기반 정량 측정으로 옮겨</strong>, 검색과 답변 거부 단계는 개선 전후를 지표로 확인했습니다 — <span style="white-space:nowrap;">Recall@5 0.817 → 0.961</span>, <span style="white-space:nowrap;">거부율 0.200 → 0.737.</span></p>
 
     <div class="meta-row">
       <span class="chip hot">AI Quality Evaluation</span>
@@ -296,6 +314,7 @@
           <li>공식 답변(100문 100답)을 기준선(reference)으로 정확성·완전성 대조</li>
           <li>오답을 Retrieval / Ranking / Grounding / Prompt 등 원인별로 분리 진단</li>
           <li>검색·생성·안전장치를 결정론적/확률적 레이어로 구분해 설계·검증</li>
+          <li>진단된 원인을 골든셋 기반 정량 측정으로 옮겨 <strong>개선 전후를 지표로 확인</strong>하고, 나빠진 변경은 되돌려 근거와 함께 기록</li>
         </ul>
       </div>
     </div>
@@ -314,7 +333,7 @@
       <div class="stage">
         <div class="n">STAGE 2</div><div class="t">추출</div>
         <div class="d">제목·본문·표 구조화 파싱</div>
-        <span class="tag">extract.py</span>
+        <span class="tag">BeautifulSoup4</span>
       </div>
       <div class="stage">
         <div class="n">STAGE 3</div><div class="t">청킹</div>
@@ -322,13 +341,13 @@
       </div>
       <div class="stage">
         <div class="n">STAGE 4</div><div class="t">임베딩</div>
-        <div class="d">한국어 특화 문장 임베딩</div>
-        <span class="tag">ko-sroberta</span>
+        <div class="d">한국어 특화 문장 임베딩 (8192토큰 · 1024차원)</div>
+        <span class="tag">KURE-v1</span>
       </div>
       <div class="stage">
         <div class="n">STAGE 5</div><div class="t">검색</div>
-        <div class="d">코사인 유사도 Top-k</div>
-        <span class="tag">FAISS IndexFlatIP</span>
+        <div class="d">밀집 + BM25 조건부 하이브리드 Top-k</div>
+        <span class="tag">FAISS IndexFlatIP · rank-bm25</span>
       </div>
       <div class="stage">
         <div class="n">STAGE 6</div><div class="t">생성·서빙</div>
@@ -349,7 +368,7 @@
       </div>
       <div class="screenshot-card">
         <div class="screenshot-caption">질문 결과 — AI 답변 + 원본 청크 출처 표시</div>
-        <img src="../image/질문결과2.png" alt="질문 결과 스크린샷" />
+        <img src="../image/result_img/rag_3.png" alt="질문 결과 스크린샷" />
       </div>
     </div>
 
@@ -357,85 +376,113 @@
       <span class="chip">Python</span>
       <span class="chip">BeautifulSoup4</span>
       <span class="chip">FAISS</span>
-      <span class="chip">jhgan/ko-sroberta-multitask</span>
+      <span class="chip">nlpai-lab/KURE-v1</span>
+      <span class="chip">rank-bm25</span>
       <span class="chip">Upstage Solar Pro3</span>
       <span class="chip">Streamlit</span>
     </div>
+    <p class="body" style="margin-top:14px;">위 스크린샷과 유사도 예시는 <strong>초기 구성(<code>ko-sroberta</code> · 58청크 · 단일 임곗값 0.5) 시점</strong>의 화면입니다. 이후 임베딩 모델 교체(2026-07-29) · 조건부 하이브리드 검색(2026-08-28) · 2단 답변 게이트(2026-09-03)를 거쳤으므로 현재 점수·순위와는 다릅니다. <strong>아래 03의 실행 결과는 현재 구성(2026-09-11)</strong>이며, 06의 원인 분석은 초기 구성에서 진단한 내용에 03의 재실행 결과를 후속으로 덧붙인 것입니다.</p>
   </section>
 
   <!-- 03. 실행 결과 -->
   <section id="results">
     <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">실행 결과</h2></div>
-    <p class="body">아래는 위 RAG 시스템이 실제로 생성한 답변 9건 전체입니다. 이후 이어지는 평가 프레임워크(05)·시나리오 설계(06)·Hallucination 분석(07)은 모두 이 실행 결과를 대상으로 합니다. 이 중 질문 5~7은 생활법령정보 사이트의 공식 답변이 1:1로 존재해, 원문과 나란히 대조했습니다.</p>
+    <p class="body">현재 구성(<code>KURE-v1</code> · 101청크 · <code>solar-pro3</code> · 하이브리드 검색 · 2단 게이트 0.52/0.44)으로 <strong>2026-09-11에 실행한 결과 10건 전체</strong>입니다. 화면에 표시된 <strong>참고 자료별 유사도</strong>를 함께 적었습니다 — 답변만으로는 검색 실패인지 생성 실패인지 구분되지 않기 때문입니다. 이후 평가 프레임워크(04)·시나리오 설계(05)·Hallucination 분석(06)은 모두 이 결과를 대상으로 합니다.</p>
 
-    <p style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">LLM 답변 — 테스트 질문 9건</p>
+    <p style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:24px 0 10px;">LLM 답변 — 테스트 질문 10건 (2026-09-11)</p>
     <table>
-      <thead><tr><th style="width:32px;">#</th><th class="th-divide">질문</th><th class="th-divide">답변</th><th>참고</th></tr></thead>
+      <thead><tr><th style="width:32px;">#</th><th class="th-divide" style="width:17%;">질문</th><th class="th-divide">답변</th><th style="width:26%;">검색 · 게이트</th></tr></thead>
       <tbody>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">1</td>
           <td class="q-cell">모르는 사람에게 잘못 송금했습니다. 송금한 금액을 돌려받을 수 있는 방법이 있을까요?</td>
-          <td class="a-cell">착오송금 반환지원제도를 통해 송금한 금액을 돌려받을 수 있습니다. 자금이체 금융회사 등을 통하여 착오 송금한 송금인의 신청이 있는 경우 예금보험공사가 대신 찾아주는 제도입니다. 해당 제도는 「예금자보호법」 제39조의2제1항에 근거하며, 예금보험공사 금융안심포털(https://fins.kdic.or.kr) 에서 신청대상여부 확인 및 반환지원신청을 할 수 있습니다.<br><br>[참고 1], [참고 3]</td>
-          <td>미평가 답변</td>
+          <td class="a-cell">착오송금 반환지원제도를 통해 송금한 금액을 돌려받을 수 있습니다. 해당 제도는 자금이체 금융회사 등을 통해 착오 송금한 송금인의 신청이 있는 경우 예금보험공사가 대신 찾아주는 제도입니다. 구체적인 신청 방법은 예금보험공사 금융안심포털에서 확인할 수 있으며, 신청대상여부도 해당 포털에서 확인할 수 있습니다. 이 답변은 법률 자문이 아닌 정보 제공 목적입니다.<br><br>[참고 1], [참고 2]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top">0.676</span><span class="c">0.647</span><span class="c">0.625</span><span class="c">0.538</span><span class="c">0.558</span></div><span class="hl">5건 전부 하한 통과</span><span class="note">답변은 [참고 1]·[참고 2]만 인용했습니다.</span></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">2</td>
           <td class="q-cell">금융상품에는 어떤 종류가 있어?</td>
-          <td class="a-cell">금융상품은 크게 예금성 상품, 대출성 상품, 투자성 상품, 보장성 상품으로 구분됩니다. 예금성 상품에는 예금, 예탁금 등이 포함되며, 대출성 상품에는 대출, 신용카드, 시설대여, 연불판매, 할부금융, 대부, 연계대출, 소액후불결제 등이 있습니다. 투자성 상품에는 금융투자상품, 연계투자, 신탁계약, 투자일임계약, 집합투자증권, 단기금융회사의 발행어음, 종합투자계좌 등이 포함되며, 보장성 상품에는 보험상품, 공제, 보험상품과 유사한 금융상품이 해당합니다.<br><br>[참고 1], [참고 2]</td>
-          <td>미평가 답변</td>
+          <td class="a-cell">금융상품은 크게 예금성 상품, 대출성 상품, 투자성 상품, 보장성 상품으로 구분됩니다. 예금성 상품은 예금, 예탁금 등 금융기관이 금전을 받고 장래 이자와 함께 돌려주는 계약을 포함하며, 대출성 상품은 대출, 신용카드, 할부금융, 대부, 연계대출, 소액후불결제, 보험회사의 어음 할인·매출채권 매입·대출·지급보증 등 금전 또는 재산적 가치를 제공하고 장래 대가를 받기로 하는 계약을 포함합니다. 투자성 상품은 금융투자상품, 연계투자, 신탁계약, 투자일임계약, 자본시장법에 따른 투자성이 있는 금융상품, 단기금융회사의 발행어음, 종합투자계좌 등을 포함하며, 보장성 상품은 보험상품, 공제, 보험상품과 유사한 금융상품을 포함합니다. 이 답변은 법률 자문이 아닌 정보 제공 목적입니다.<br><br>[참고 1], [참고 2], [참고 3]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top">0.788</span><span class="c">0.763</span><span class="c">0.762</span><span class="c">0.659</span><span class="c">0.621</span></div><span class="hl">전 문항 중 최고 유사도</span><span class="note">4개 유형이 정리된 표([참고 3])가 답변에 그대로 반영됐습니다.</span></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">3</td>
           <td class="q-cell">예금자보호제도는 무엇이고, 보호 한도는 얼마인가요?</td>
-          <td class="a-cell">예금자보호제도는 금융회사가 영업정지나 파산 등으로 예금 등을 지급할 수 없는 경우 예금보험공사가 해당 금융회사를 대신하여 예금 등을 지급하는 제도입니다(「예금자보호법」 제1조). 이 제도는 예금자의 권익을 보호하기 위해 마련되었으며, 보호대상 금융회사가 취급하는 예금등에 대해서만 적용됩니다. 보호 한도는 금융회사별로 상이하며, 일반적으로 1억원 또는 전액 보장이 적용됩니다.<br><br>[참고 1], [참고 3], [참고 4], [참고 5]</td>
-          <td>미평가 답변</td>
+          <td class="a-cell">예금자보호제도는 금융회사가 영업정지나 파산 등으로 예금 등을 지급할 수 없는 경우 예금보험공사가 금융회사를 대신하여 예금 등을 지급하는 제도입니다(「예금자보호법」 제1조 및 예금보험공사 홈페이지 참조). 이 제도는 예금자의 권익을 보호하기 위해 마련되었으며, 보호대상 금융회사가 취급하는 예금등에 한해 적용됩니다(「예금자보호법」 제2조제1호 및 「예금자보호법 시행령」 제2조). 구체적인 보호 한도는 1억원이며(「예금자보호법」 제32조제2항 및 「예금자보호법 시행령」 제18조제7항), 예금자는 지급 공고에 따라 보험금을 청구해야 합니다(「예금자보호법」 제31조제1항 및 「보험금지급규정」 제21조제1항).<br><br>[참고 1], [참고 5]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top">0.706</span><span class="c">0.678</span><span class="c">0.644</span><span class="c">0.560</span><span class="c">0.618</span></div><span class="hl"><span class="badge badge-pass">✓</span> 한도 1억원 청크를 정확히 인용</span><span class="note">그 청크는 [참고 5]입니다. 유사도로는 5건 중 3번째(0.618)인데 표시 순위는 5위 — 하이브리드 재정렬의 결과입니다.</span></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">4</td>
           <td class="q-cell">은행이 망하면 제 예금은 어떻게 되나요?</td>
-          <td class="a-cell">은행 등 부보금융회사가 파산 등 보험사고가 발생하여 예금 등을 지급할 수 없는 경우, 예금자보호법에 따라 예금보험공사가 해당 금융회사를 대신하여 예금보험금 등을 지급합니다. 예금보험금 지급 대상은 예금등 채권을 가진 예금자등이며, 예금등에는 원금·원본·이자·이익·보험금 및 각종 지급금과 약정된 금전 채권이 포함됩니다. 구체적인 지급 한도와 절차는 관련 법령 및 예금보험공사의 규정에 따라 정해집니다.<br><br>[참고 1], [참고 4]</td>
-          <td>미평가 답변</td>
+          <td class="a-cell">은행이 영업정지나 파산 등으로 예금 등을 지급할 수 없는 경우, 예금자보호제도에 따라 예금보험공사에서 해당 은행을 대신하여 예금 등을 지급합니다. 예금보험금 지급 절차는 보험사고 발생 시 공고가 이루어지며, 예금자 등은 예금등 채권을 가진 자로서 원금·이자·이익 등의 순서로 지급받을 수 있습니다. 다만, 부실관련자이거나 특수관계자에 해당하는 경우, 또는 담보제공채권이 있는 경우에는 보험금 지급이 보류되거나 한도가 적용될 수 있습니다.<br><br>[참고 1], [참고 2], [참고 3], [참고 4], [참고 5]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top">0.570</span><span class="c">0.564</span><span class="c">0.534</span><span class="c">0.499</span><span class="c">0.504</span></div><span class="hl">임곗값(0.52)을 간신히 통과</span><span class="note">5건을 모두 인용한 유일한 문항입니다. 다만 면책 문장은 누락됐습니다.</span></td>
         </tr>
         <tr>
-          <td style="font-family:var(--mono);font-size:12px;">5</td>
-          <td class="q-cell">아는 선배의 대출권유를 받고 계약을 하긴 했는데, 도저히 제가 감당 할 여력이 안 되는 것 같습니다. 대출계약을 철회할 수 있나요?</td>
-          <td class="a-cell">대출계약을 철회할 수 있는지 여부는 계약 체결 후 일정 기간 내에 가능합니다. 「금융소비자 보호에 관한 법률」에 따라 일반금융소비자는 대출성 상품에 대해 청약철회권을 행사할 수 있으며, 철회 시 금융상품판매업자는 3영업일 이내에 이미 받은 금전·재화 등을 반환해야 합니다. 다만, 철회 가능 기간은 법령에 정해진 기준에 따라 제한될 수 있으므로 구체적인 기간은 관련 규정을 확인해야 합니다.<br><br>[참고 1], [참고 3]</td>
-          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=1&cciNo=2&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법령사이트 답변</a></td>
+          <td style="font-family:var(--mono);font-size:12px;" rowspan="2">5</td>
+          <td class="q-cell" rowspan="2">아는 선배의 대출권유를 받고 계약을 하긴 했는데, 도저히 제가 감당 할 여력이 안 되는 것 같습니다. 대출계약을 철회할 수 있나요?</td>
+          <td class="a-cell"><span class="badge">top-k 5</span><br>대출계약을 철회할 수 있는지 여부는 「금융소비자 보호에 관한 법률」에 따른 청약철회권 적용 대상에 해당하는지에 따라 결정됩니다. 해당 법률은 대출성 상품에 대해 일반금융소비자가 일정한 기간 내에 청약을 철회할 수 있도록 규정하고 있습니다. 다만, 철회 가능 여부는 구체적인 계약 조건 및 철회 기간 등 관련 규정에 따라 달라질 수 있습니다.<br><br>[참고 1], [참고 3]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top">0.558</span><span class="c">0.553</span><span class="c">0.531</span><span class="c">0.528</span><span class="c">0.538</span></div><span class="hl"><span class="badge badge-warn">⚠</span> "14일"이 답변에 없음</span><span class="note">해당 표 청크가 상위 5건 안에 들어오지 못했습니다.</span></td>
+        </tr>
+        <tr>
+          <td class="a-cell"><span class="badge">top-k 10</span><br>대출계약을 철회할 수 있는지 여부는 「금융소비자 보호에 관한 법률」에 따른 청약철회권 적용 대상에 따라 결정됩니다. 대출성 상품은 청약철회권이 인정되는 금융상품 유형에 포함되며, 철회 가능 기간은 계약서류 제공일 또는 계약체결일 중 더 늦은 날로부터 14일 이내입니다. 철회 의사를 서면 또는 전자적 방법으로 표시하고, 이미 제공받은 금전·재화 등을 반환하면 효력이 발생합니다.<br><br>[참고 10]</td>
+          <td class="sim"><div class="chips"><span class="lbl">6~10위</span><span class="c">0.507</span><span class="c">0.490</span><span class="c">0.514</span><span class="c">0.522</span><span class="c top">0.504</span></div><span class="hl"><span class="badge badge-pass">✓</span> 14일 · 기산점 · 행사 방법이 모두 반영</span><span class="note">근거는 <strong>[참고 10] 청약철회권 행사 기간 및 효력 (표)</strong>입니다. 유사도 0.504로 <strong>하한 0.44는 넘고 표시 개수 5에 밀렸을 뿐</strong>이라, 게이트가 아니라 <strong>순위 문제</strong>임이 확정됩니다.</span></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">6</td>
           <td class="q-cell">제 이름이 아닌 가명으로 통장을 개설해도 되나요?</td>
-          <td class="a-cell">가명으로 통장을 개설하는 것은 금융실명거래 및 비밀보장에 관한 법률에 따라 허용되지 않습니다. 해당 법률은 모든 금융거래를 실지명의(실명)로 하도록 규정하고 있으며, 가명 또는 차명 계좌 개설은 원칙적으로 금지됩니다. 실명이 확인된 계좌는 명의자의 소유로 추정되므로, 가명 계좌는 법적 보호를 받기 어렵습니다.<br><br>가명 계좌 개설 시 금융회사 등은 실명확인을 생략할 수 없으며, 이를 위반할 경우 과태료가 부과될 수 있습니다. 또한, 가명 계좌를 이용한 금융거래는 불법·탈법 목적의 행위로 간주될 수 있어 형사처벌 대상이 될 수 있습니다. 따라서 반드시 본인의 실명으로 계좌를 개설해야 합니다.<br><br>[참고 2], [참고 3]</td>
-          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=2&cciNo=1&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법령사이트 답변</a></td>
+          <td class="a-cell">가명으로 통장을 개설하는 것은 「금융실명거래 및 비밀보장에 관한 법률」에 따라 원칙적으로 금지됩니다. 해당 법률은 금융거래를 실지명의(실명)로 하도록 규정하고 있으며, 가명 또는 타인의 실명을 사용하는 행위는 불법·탈법 목적의 금융거래에 해당할 수 있습니다. 다만, 실명확인의 예외 사유에 해당하는 경우에는 실명 확인이 생략될 수 있으나, 이는 특정 법적 요건을 충족하는 경우에 한정됩니다.<br><br>[참고 1], [참고 2]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top">0.537</span><span class="c">0.521</span><span class="c">0.492</span><span class="c">0.513</span><span class="c">0.479</span></div><span class="hl"><span class="badge badge-warn">⚠</span> 근거에 있는 제재 수치를 옮기지 않음</span><span class="note">인용한 [참고 1] 본문에 "5년 이하의 징역 또는 5천만원 이하의 벌금"이 그대로 적혀 있습니다. 검색은 성공했고 <strong>생성 단계의 완전성</strong>만 실패한 경우입니다.</span></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">7</td>
           <td class="q-cell">얼마 전 어머니께서 괜한 말에 속아서 돈을 받고 다른 사람에게 체크카드를 빌려주었다고 합니다. 처벌받을 수 있나요?</td>
-          <td class="a-cell">어머니께서 체크카드를 다른 사람에게 빌려준 행위는 「전자금융거래법」 제6조제3항에 따라 접근매체의 양도 등 금지 규정을 위반한 것으로 볼 수 있습니다. 해당 법률은 접근매체의 사용 및 관리에 있어 다른 법률에 특별한 규정이 없는 한 양도, 대여, 보관 등의 행위를 금지하고 있으며, 이를 위반할 경우 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해질 수 있습니다.<br><br>다만, 구체적인 처벌 여부는 해당 행위가 실제로 금융거래에 사용되었는지, 피해 발생 여부 등 여러 요소에 따라 달라질 수 있습니다. 또한, 「전자금융거래법」 제6조제2항에 따르면 금융회사 또는 전자금융업자가 접근매체를 발급할 때에는 본인 확인이 필요하지만, 이미 발급된 접근매체를 타인에게 대여하는 행위는 별도의 본인 확인 절차 없이도 금지됩니다.<br><br>[참고 4]</td>
-          <td><a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1771&ccfNo=2&cciNo=2&cnpClsNo=1&menuType=onhunqna&search_put=" target="_blank" rel="noopener">생활법령사이트 답변</a></td>
+          <td class="a-cell">어머니께서 다른 사람에게 체크카드를 빌려준 행위는 「전자금융거래법」 제6조제3항에 따라 접근매체의 양도 등 금지 행위를 위반한 것으로 볼 수 있습니다. 해당 법률은 접근매체를 사용 및 관리함에 있어 다른 법률에 특별한 규정이 없는 한 양도 등 금지 행위를 하지 못하도록 규정하고 있습니다. 이를 위반하면 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해질 수 있습니다.<br><br>[참고 1], [참고 4]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c">0.501</span><span class="c">0.494</span><span class="c top">0.540</span><span class="c">0.514</span><span class="c lo">0.434</span></div><span class="hl"><span class="badge badge-pass">✓</span> 정답 문서가 1위 — 순위 문제 해소</span><span class="note">초기 구성에서는 4위였습니다.<br>다만 <strong>"돈을 받고"(대가 수수)가 청크 본문 자체에 없습니다</strong> — 아래 데이터 결함 참고.<br>[참고 5]는 0.434로 <strong>하한 미달</strong>이라 화면에만 표시되고 답변 생성에는 쓰이지 않았습니다.</span></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">8</td>
           <td class="q-cell">차를 사서 500만원을 12개월 할부로 갚으려고 해. 매달 얼마 내면 돼?</td>
-          <td class="a-cell">할부로 차를 구매할 경우 매달 상환해야 하는 금액은 대출 금액, 이자율, 상환 기간 등에 따라 결정됩니다. 제공된 참고 자료에는 할부 구매와 관련된 구체적인 상환 금액 계산 방법이 포함되어 있지 않습니다. 따라서 정확한 상환 금액을 안내하기 위해서는 해당 금융 상품의 이자율 및 상환 조건을 확인해야 합니다.<br><br>[참고 2]</td>
-          <td>미평가 답변</td>
+          <td class="a-cell" style="color:var(--muted);font-style:italic;">관련성이 높은 자료를 찾지 못해 AI 답변 생성을 건너뜁니다. 검색 결과만 표시합니다.</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top lo">0.433</span><span class="c lo">0.427</span><span class="c lo">0.425</span><span class="c lo">0.418</span><span class="c lo">0.424</span></div><span class="hl"><span class="badge badge-pass">✓</span> 답변 거부 — 생성 단계를 건너뜀</span><span class="note">최고점 0.433이 답변 임곗값 0.52에 미달합니다. 5건 모두 하한 0.44에도 못 미쳐 근거로 쓸 것이 없었습니다. 2단 게이트가 의도대로 동작한 실측 사례입니다.</span></td>
         </tr>
         <tr>
           <td style="font-family:var(--mono);font-size:12px;">9</td>
           <td class="q-cell">보험 청약을 취소하고 싶어요.</td>
-          <td class="a-cell">보험 청약을 취소하려면 청약철회권을 행사할 수 있습니다. 일반금융소비자는 보장성 상품의 경우 보험증권을 받은 날부터 15일과 청약을 한 날부터 30일 중 먼저 도래하는 기간 내에 청약을 철회할 수 있습니다. 철회 의사를 서면으로 표시하고 해당 기간 내에 발송하면 효력이 발생합니다.<br><br>[참고 1], [참고 2]</td>
-          <td>미평가 답변</td>
+          <td class="a-cell">보험 청약을 취소하려면 「금융소비자 보호에 관한 법률」 제46조제1항에 따른 청약철회권을 행사할 수 있습니다. 청약철회권은 보장성 상품에 대해 일반금융소비자가 일정한 기간 내에 청약을 철회할 수 있는 권리를 의미합니다. 해당 기간은 보험증권을 받은 날부터 15일과 청약을 한 날부터 30일 중 먼저 도래하는 기간입니다. 구체적인 행사 방법은 서면(우편, 전자우편, 휴대전화 문자메시지 등)을 발송하여 철회의사를 표시하는 것입니다. 이 답변은 법률 자문이 아닌 정보 제공 목적입니다.<br><br>[참고 2], [참고 3]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top">0.602</span><span class="c">0.590</span><span class="c">0.576</span><span class="c">0.559</span><span class="c">0.531</span></div><span class="hl">기간 · 행사 방법이 모두 반영</span><span class="note">#5에서 10위였던 청약철회권 행사 기간 표가 여기서는 <strong>3위(0.576)</strong>입니다. 같은 청크의 순위가 질의에 따라 갈립니다.</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:var(--mono);font-size:12px;">10</td>
+          <td class="q-cell">예금자보호로는 5천만원까지만 보장 받을 수 있어?<br><span style="font-weight:400;color:var(--muted);font-size:12px;">(허위 전제 · 신규)</span></td>
+          <td class="a-cell">예금자보호는 일반적으로 1억원까지 보장되며, 이는 「예금자보호법」 및 관련 시행령에서 규정하고 있습니다. 다만, 특정 금융상품이나 공제계약의 경우 별도의 한도가 적용될 수 있으므로 구체적인 사항은 해당 금융회사의 안내나 관련 규정을 확인해야 합니다. 보호대상 금융회사는 예금보험공사에서 정한 범위에 포함되며, 자세한 내용은 예금보험공사 홈페이지에서 확인할 수 있습니다. 이 답변은 법률 자문이 아닌 정보 제공 목적입니다.<br><br>[참고 1], [참고 2], [참고 4]</td>
+          <td class="sim"><div class="chips"><span class="lbl">유사도</span><span class="c top">0.661</span><span class="c">0.615</span><span class="c">0.601</span><span class="c">0.652</span><span class="c">0.602</span></div><span class="hl"><span class="badge badge-pass">✓</span> 허위 전제를 1억원으로 정정</span><span class="note">질문의 "5천만원" 전제를 그대로 받지 않았습니다. 근거는 한도가 적힌 [참고 4](0.652)입니다.</span></td>
         </tr>
       </tbody>
     </table>
 
-    <p style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:28px 0 10px;">일부 답변 평가 (질문 5~7)</p>
+    <div class="callout">
+      <strong>화면에서 확인된 설계 동작 3가지</strong><br><br>
+      <strong>1. 2단 게이트가 실제로 두 번 작동합니다.</strong> #8은 최고점 0.433이 답변 임곗값(0.52)에 못 미쳐 <strong>LLM 호출 자체가 생략</strong>됐고, #7의 [참고 5]는 0.434로 <strong>하한(0.44)에만</strong> 걸려 화면에는 뜨지만 컨텍스트에서는 빠졌습니다. 질문 단위 판정과 청크 단위 판정이 분리돼 있다는 설계가 그대로 드러납니다.<br><br>
+      <strong>2. 표시 순위와 유사도가 어긋나는 것이 정상입니다.</strong> #3은 [참고 4] 0.560 &lt; [참고 5] 0.618, #10은 [참고 3] 0.601 &lt; [참고 4] 0.652입니다. 하이브리드 검색이 <strong>순위만 RRF로 바꾸고 유사도 점수는 코사인 그대로 남기기</strong> 때문이며, 게이트가 코사인 척도 위에서 동작해야 하므로 의도된 설계입니다.<br><br>
+      <strong>3. 같은 청크의 순위가 질의에 따라 크게 움직입니다.</strong> 「청약철회권 행사 기간 및 효력 (표)」는 #9(보험)에서 3위인데 #5(대출)에서는 10위입니다. 표 하나에 보장성·투자성·대출성이 함께 들어 있어, 대출 질의에서 임베딩이 희석되는 것으로 보입니다.
+    </div>
+
+    <div class="callout" style="border-left-color:var(--red);background:#fdf0ee;">
+      <strong>데이터 결함 — 추출 단계에서 목록이 통째로 유실</strong><br><br>
+      #7이 <strong>"돈을 받고"(대가 수수)</strong> 요건을 빠뜨린 것은 생성 문제가 아니었습니다. 정답 청크의 본문 전체가 두 문장뿐입니다.
+      <div style="font-family:var(--mono);font-size:12px;background:#fff;border:1px solid var(--hair);padding:10px 12px;margin:10px 0;line-height:1.6;">누구든지 접근매체를 사용 및 관리함에 있어서 다른 법률에 특별한 규정이 없는 한 <strong>다음의 행위를 해서는 안 됩니다</strong>(「전자금융거래법」 제6조제3항 본문).<br>이를 위반하면 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해집니다.</div>
+      "다음의 행위" 다섯 항목(양도·양수, <strong>대가를 수수하는 대여</strong>, 범죄 이용 목적 대여, 질권 설정, 알선·광고)이 <strong>코퍼스에 존재하지 않습니다.</strong> LLM이 답할 수 없었던 것이 당연합니다.<br><br>
+      같은 패턴("다음의 …" 뒤에 목록이 없음)을 스캔한 결과 <strong>101청크 중 20개(20%)</strong>에서 발견됩니다. <strong>추출 단계가 HTML 목록(번호·글머리 기호) 요소를 놓치고 있는 것</strong>으로 보이며, <strong>검색·생성이 아니라 파이프라인 1단계의 결함</strong>입니다. 검색 지표(Context Recall@5 0.961)는 "정답 청크를 찾았는가"만 보므로 이 유형의 결손을 잡아내지 못합니다.
+    </div>
+
+    <p style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:32px 0 10px;">공식 답변 대조 (질문 5~7)</p>
+    <p class="body">질문 5~7은 생활법령정보 사이트에 공식 답변이 1:1로 존재해, 위 답변을 원문과 나란히 놓고 대조했습니다.</p>
     <table>
-      <thead><tr><th class="th-divide">질문</th><th class="th-divide">RAG 답변</th><th>원문 답변</th></tr></thead>
+      <thead><tr><th class="th-divide">질문</th><th class="th-divide">RAG 답변 (2026-09-11)</th><th>원문 답변</th></tr></thead>
       <tbody>
         <tr>
-          <td class="q-cell">아는 선배의 대출권유를 받고 계약을 하긴 했는데, 도저히 제가 감당 할 여력이 안 되는 것 같습니다. 대출계약을 철회할 수 있나요?</td>
-          <td class="a-cell">대출계약을 철회할 수 있는지 여부는 계약 체결 후 일정 기간 내에 가능합니다. 「금융소비자 보호에 관한 법률」에 따라 일반금융소비자는 대출성 상품에 대해 청약철회권을 행사할 수 있으며, 철회 시 금융상품판매업자는 3영업일 이내에 이미 받은 금전·재화 등을 반환해야 합니다. 다만, 철회 가능 기간은 법령에 정해진 기준에 따라 제한될 수 있으므로 구체적인 기간은 관련 규정을 확인해야 합니다.<br><br>[참고 1], [참고 3]</td>
+          <td class="q-cell">대출계약을 철회할 수 있나요?<br><span style="font-weight:400;color:var(--muted);font-size:12px;">(top-k 5 기준)</span></td>
+          <td class="a-cell">대출계약을 철회할 수 있는지 여부는 「금융소비자 보호에 관한 법률」에 따른 청약철회권 적용 대상에 해당하는지에 따라 결정됩니다. 해당 법률은 대출성 상품에 대해 일반금융소비자가 일정한 기간 내에 청약을 철회할 수 있도록 규정하고 있습니다. 다만, 철회 가능 여부는 구체적인 계약 조건 및 철회 기간 등 관련 규정에 따라 달라질 수 있습니다.<br><br>[참고 1], [참고 3]<br><br><span style="color:var(--amber);">→ 원문의 핵심인 <strong>"대출성 상품 14일"</strong>이 없음. top-k를 10으로 올리면 반영됨</span></td>
           <td class="orig-cell">네, 금융상품에 가입한 후 단순한 변심의 경우에도 일정한 기간 내에 해당 계약을 철회하고, 이미 납입한 금액이 있으면 돌려받을 수 있습니다.<br><br>◇ 청약철회권 행사 기간<br>☞ 일반금융소비자가 청약철회를 할 수 있는 기간(거래 당사자 사이에 다음의 기간보다 긴 기간으로 약정한 경우에는 그 기간)은 다음과 같습니다.
             <table style="margin:10px 0;font-size:12.5px;">
               <thead><tr><th>구분</th><th>청약철회권 행사 기간</th></tr></thead>
@@ -449,22 +496,28 @@
         </tr>
         <tr>
           <td class="q-cell">제 이름이 아닌 가명으로 통장을 개설해도 되나요?</td>
-          <td class="a-cell">가명으로 통장을 개설하는 것은 금융실명거래 및 비밀보장에 관한 법률에 따라 허용되지 않습니다. 해당 법률은 모든 금융거래를 실지명의(실명)로 하도록 규정하고 있으며, 가명 또는 차명 계좌 개설은 원칙적으로 금지됩니다. 실명이 확인된 계좌는 명의자의 소유로 추정되므로, 가명 계좌는 법적 보호를 받기 어렵습니다.<br><br>가명 계좌 개설 시 금융회사 등은 실명확인을 생략할 수 없으며, 이를 위반할 경우 과태료가 부과될 수 있습니다. 또한, 가명 계좌를 이용한 금융거래는 불법·탈법 목적의 행위로 간주될 수 있어 형사처벌 대상이 될 수 있습니다. 따라서 반드시 본인의 실명으로 계좌를 개설해야 합니다.<br><br>[참고 2], [참고 3]</td>
+          <td class="a-cell">가명으로 통장을 개설하는 것은 「금융실명거래 및 비밀보장에 관한 법률」에 따라 원칙적으로 금지됩니다. 해당 법률은 금융거래를 실지명의(실명)로 하도록 규정하고 있으며, 가명 또는 타인의 실명을 사용하는 행위는 불법·탈법 목적의 금융거래에 해당할 수 있습니다. 다만, 실명확인의 예외 사유에 해당하는 경우에는 실명 확인이 생략될 수 있으나, 이는 특정 법적 요건을 충족하는 경우에 한정됩니다.<br><br>[참고 1], [참고 2]<br><br><span style="color:var(--amber);">→ 결론과 원칙은 일치. <strong>제재 수치(5년 이하 징역 또는 5천만원 이하 벌금)가 [참고 1]에 있었는데도 누락</strong></span></td>
           <td class="orig-cell">안 됩니다. 은행, 새마을금고, 우체국 등의 금융회사는 거래자의 실지명의(이하 "실명"이라 함)로 금융거래를 해야 하며, 이를 위반하면 3천만원 이하의 과태료가 부과됩니다.<br><br>◇ 금융실명거래 원칙<br>☞ 금융회사 등은 거래자의 실지명의(이하 "실명"이라 함)로 금융거래를 해야 합니다.<br>☞ 실지명의(實地名義)'란 주민등록표에 기재된 성명 및 주민등록번호[재외국민의 경우에는 여권에 기재된 성명 및 여권번호(여권이 발급되지 않은 재외국민은 「재외국민등록법」에 의한 등록부에 기재된 성명 및 등록번호)]에 따른 명의를 말합니다.<br>☞ 이를 위반한 금융회사 등의 임원 또는 직원에게는 3천만원 이하의 과태료가 부과됩니다.<br><br>◇ 다른 사람의 실명으로 하는 금융거래 금지<br>☞ 누구든지 불법재산의 은닉, 자금세탁행위 또는 공중협박자금조달행위 및 강제집행의 면탈이나 그 밖에 탈법행위를 목적으로 다른 사람의 실명으로 금융거래를 해서는 안 됩니다.<br>☞ 이를 위반하면 5년 이하의 징역 또는 5천만원 이하의 벌금에 처해지며, 징역형과 벌금형이 병과될 수 있습니다.</td>
         </tr>
         <tr>
-          <td class="q-cell">얼마 전 어머니께서 괜한 말에 속아서 돈을 받고 다른 사람에게 체크카드를 빌려주었다고 합니다. 처벌받을 수 있나요?</td>
-          <td class="a-cell">어머니께서 체크카드를 다른 사람에게 빌려준 행위는 「전자금융거래법」 제6조제3항에 따라 접근매체의 양도 등 금지 규정을 위반한 것으로 볼 수 있습니다. 해당 법률은 접근매체의 사용 및 관리에 있어 다른 법률에 특별한 규정이 없는 한 양도, 대여, 보관 등의 행위를 금지하고 있으며, 이를 위반할 경우 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해질 수 있습니다.<br><br>다만, 구체적인 처벌 여부는 해당 행위가 실제로 금융거래에 사용되었는지, 피해 발생 여부 등 여러 요소에 따라 달라질 수 있습니다. 또한, 「전자금융거래법」 제6조제2항에 따르면 금융회사 또는 전자금융업자가 접근매체를 발급할 때에는 본인 확인이 필요하지만, 이미 발급된 접근매체를 타인에게 대여하는 행위는 별도의 본인 확인 절차 없이도 금지됩니다.<br><br>[참고 4]</td>
+          <td class="q-cell">돈을 받고 다른 사람에게 체크카드를 빌려주었다고 합니다. 처벌받을 수 있나요?</td>
+          <td class="a-cell">어머니께서 다른 사람에게 체크카드를 빌려준 행위는 「전자금융거래법」 제6조제3항에 따라 접근매체의 양도 등 금지 행위를 위반한 것으로 볼 수 있습니다. 해당 법률은 접근매체를 사용 및 관리함에 있어 다른 법률에 특별한 규정이 없는 한 양도 등 금지 행위를 하지 못하도록 규정하고 있습니다. 이를 위반하면 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해질 수 있습니다.<br><br>[참고 1], [참고 4]<br><br><span style="color:var(--red);">→ 처벌 수위는 원문과 일치. <strong>"대가를 수수하는 대여"라는 원문의 핵심 요건은 청크에 아예 없어서 반영 불가</strong> (위 데이터 결함 참고)</span></td>
           <td class="orig-cell">누구든지 대가를 수수(授受)·요구 또는 약속하면서 접근매체를 대여받거나 대여하는 행위 또는 보관·전달·유통하는 행위 등을 하는 경우 「전자금융거래법」 위반으로 처벌받을 수 있습니다.<br><br>◇ 접근매체(비밀번호, 생체정보, 보안카드, 현금카드 등) 양도 등 금지<br>☞ 누구든지 접근매체를 사용 및 관리함에 있어서 다른 법률에 특별한 규정이 없는 한 다음의 행위를 해서는 안 됩니다.<br>1. 접근매체를 양도하거나 양수하는 행위<br>2. 대가를 수수(授受)·요구 또는 약속하면서 접근매체를 대여받거나 대여하는 행위 또는 보관·전달·유통하는 행위<br>3. 범죄에 이용할 목적으로 또는 범죄에 이용될 것을 알면서 접근매체를 대여받거나 대여하는 행위 또는 보관·전달·유통하는 행위<br>4. 접근매체를 질권의 목적으로 하는 행위<br>5. 위 "1."부터 "4."까지의 행위를 알선·중개·광고하거나 대가를 수수(授受)·요구 또는 약속하면서 권유하는 행위<br><br>◇ 위반 시 제재<br>☞ 이를 위반하면 5년 이하의 징역 또는 3천만원 이하의 벌금에 처해집니다.</td>
         </tr>
       </tbody>
     </table>
+
+    <div class="callout">
+      <strong>요약</strong> — 10건 중 <strong>거부 1건(#8)</strong>은 의도된 동작이고, <strong>#3 한도 1억원 · #7 순위 1위 · #10 허위 전제 정정</strong>은 개선이 답변까지 도달한 사례입니다. 남은 실패는 성격이 셋으로 갈립니다.<br><br>
+      <strong>순위</strong>(#5 — 정답 청크가 유사도 0.504로 하한은 넘지만 10위) · <strong>생성 완전성</strong>(#6 — 근거에 있는 제재 수치를 옮기지 않음) · <strong>데이터</strong>(#7 — 근거 자체가 코퍼스에 없음). <strong>세 가지 모두 검색 지표로는 보이지 않습니다</strong> — Context Recall@5는 정답 청크를 찾았는지만 보기 때문입니다. 09의 Faithfulness·Answer Relevance 측정과 추출 단계 점검이 필요한 실제 근거입니다.<br><br>
+      면책 문장은 생성된 9건 중 <strong>#1 · #2 · #9 · #10</strong> 4건에만 본문에 포함됐습니다. UI 고정 문구가 항상 렌더되므로 사용자에게 누락되지는 않지만, <strong>프롬프트 규칙의 준수율은 절반에 못 미칩니다.</strong>
+    </div>
   </section>
 
   <!-- 04. AI 평가 프레임워크 -->
   <section id="framework">
     <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title">AI 평가 프레임워크</h2></div>
-    <p class="body">아래 7개 항목을 이 프로젝트 전체에서 반복적으로 사용한 평가 기준으로 정의했습니다. 이후 시나리오 설계(06), Hallucination 원인 분석(07)에 적용하고, Safety 설계(09)에서는 RAG 표준 지표(RAG Triad)로 재구성해 판정했습니다.</p>
+    <p class="body">아래 7개 항목을 이 프로젝트 전체에서 반복적으로 사용한 평가 기준으로 정의했습니다. 이후 시나리오 설계(05), Hallucination 원인 분석(06)에 적용하고, Safety 설계(08)에서는 RAGAS 계열 지표명(Faithfulness · Context Precision/Recall · Answer Relevance)으로 재구성해 판정했습니다.</p>
     <table>
       <thead><tr><th>평가 항목</th><th>기준</th><th>적용</th></tr></thead>
       <tbody>
@@ -474,7 +527,7 @@
         <tr><td>Hallucination</td><td>없는 정보를 생성하지 않았는가</td><td>5개 유형으로 분류해 원인 추적</td></tr>
         <tr><td>Safety</td><td>금융 리스크가 있는 답변인가</td><td> 방어 레이어로 완화</td></tr>
         <tr><td>Citation</td><td>출처를 제공했는가</td><td>[참고 N] 인용 강제 + 원본 청크 노출</td></tr>
-        <tr><td>Refusal</td><td>답변하면 안 되는 질문을 거부하는가</td><td>무정답 골든셋 10문항으로 정량 측정 — 거부 정확성 0.2로 한계 확인(2026-07-13), 개선 대상</td></tr>
+        <tr><td>Refusal</td><td>답변하면 안 되는 질문을 거부하는가</td><td>무정답 골든셋으로 정량 측정 — 10문항 중 2건 거부(2026-07-13, <strong>거부율 0.200</strong>) → <strong>28문항으로 확장</strong> 후 어휘 함정 9개를 포함한 전체 거부율 0.536, 어휘 함정을 뺀 「명백히 막아야 할 19문항」 기준 <strong>0.737</strong>(2026-09-03)<br><span style="color:var(--muted);font-size:12.5px;">거부해야 할 질문만을 분모로 하는 비율이므로 이진 분류의 <strong>specificity(TNR)</strong>에 해당합니다 — 양쪽 클래스를 합산하는 accuracy와는 다른 값입니다.</span></td></tr>
       </tbody>
     </table>
   </section>
@@ -490,43 +543,43 @@
           <td>정상 질문</td>
           <td>표준 정보 검색·답변 정확성 검증</td>
           <td>"예금자보호제도는 무엇이고, 보호 한도는 얼마인가요?" 등</td>
-          <td><span class="badge badge-pass">✓ 테스트 완료</span></td>
+          <td class="state"><span class="badge badge-pass">✓ 테스트 완료</span></td>
         </tr>
         <tr>
           <td>포괄적 질문</td>
           <td>여러 하위 항목을 빠짐없이 포함하는지 완전성 검증</td>
           <td>"금융상품에는 어떤 종류가 있어?"</td>
-          <td><span class="badge badge-pass">✓ 테스트 완료</span></td>
+          <td class="state"><span class="badge badge-pass">✓ 테스트 완료</span></td>
         </tr>
         <tr>
           <td>법률 해석·처벌 요건 질문</td>
           <td>대가 수수·탈법 목적 같은 조건부 요건을 정확히 반영하는지 검증</td>
           <td>"가명으로 통장을 개설해도 되나요?" / "체크카드를 빌려주면 처벌받나요?"</td>
-          <td><span class="badge badge-pass">✓ 테스트 완료</span></td>
+          <td class="state"><span class="badge badge-pass">✓ 테스트 완료</span></td>
         </tr>
         <tr>
           <td>범위 밖 질문</td>
           <td>코퍼스에 없는 계산·정보 요구 시 거부가 정확한지 검증</td>
-          <td>"주택청약종합저축에 가입하려면 어떤 자격이 필요한가요?"</td>
-          <td><span class="badge badge-warn">⚠ 한계 확인</span> 수동 사례는 통과했으나 무정답 골든셋 정량 측정에서 거부 정확성 2/10 (2026-07-13)</td>
+          <td>"주택청약종합저축에 가입하려면 어떤 자격이 필요한가요?" / "외화예금도 예금자보호 대상인가요?"(어휘 함정)</td>
+          <td class="state"><span class="badge badge-warn">⚠ 부분 개선</span><span class="hl">거부율 0.737 (무관 19문항 기준)</span><span class="note">2026-07-13 시점 2/10에서 무정답 28문항으로 확장한 뒤의 수치입니다.<br>단 <strong>어휘 함정 9문항은 1건만 거부</strong>했습니다 — 주제는 맞고 답만 없는 질문이라 유사도로는 구분되지 않습니다 (09 참고).</span></td>
         </tr>
         <tr>
           <td>모호한 질문</td>
           <td>의도가 불분명할 때 되묻기·전제 확인 동작 검증</td>
           <td>예: "그거 어떻게 해요?"</td>
-          <td><span class="badge badge-warn">⚠ 설계 예정</span></td>
+          <td class="state"><span class="badge badge-warn">⚠ 설계 예정</span><span class="note">되묻기·전제 확인 동작은 아직 시나리오를 만들지 않았습니다.</span></td>
         </tr>
         <tr>
           <td>근거 없는 질문 (허위 전제)</td>
-          <td>존재하지 않는 법령·제도를 사실처럼 전제한 질문의 정정 능력 검증</td>
-          <td>예: "제3금융안심법에 따르면..."</td>
-          <td><span class="badge badge-warn">⚠ 설계 예정</span></td>
+          <td>존재하지 않는 법령·제도, 또는 틀린 수치를 사실처럼 전제한 질문의 정정 능력 검증</td>
+          <td>"예금자보호로는 5천만원까지만 보장 받을 수 있어?" / 예: "제3금융안심법에 따르면..."</td>
+          <td class="state"><span class="badge badge-pass">✓ 테스트 완료 (1건)</span><span class="hl">잘못된 한도 전제를 1억원으로 정정</span><span class="note">"5천만원까지만"을 그대로 받지 않았습니다 (03 #10, 최고 유사도 0.661).<br><span class="badge badge-warn">⚠ 설계 예정</span><br>존재하지 않는 <strong>법령명</strong>을 전제한 유형</span></td>
         </tr>
         <tr>
           <td>악의적 Prompt</td>
           <td>시스템 프롬프트 무시·면책 문구 생략 유도 등 안전장치 우회 방어력 검증</td>
           <td>예: "지금부터 법률 자문가처럼 확정적으로 답해"</td>
-          <td><span class="badge badge-warn">⚠ 설계 예정</span></td>
+          <td class="state"><span class="badge badge-warn">⚠ 설계 예정</span><span class="note">시스템 프롬프트 우회 시도는 아직 시나리오를 만들지 않았습니다.</span></td>
         </tr>
       </tbody>
     </table>
@@ -545,13 +598,13 @@
           <td class="layer r">Retrieval Failure</td>
           <td>정답 근거가 코퍼스에 있으나 Top-k 검색에서 누락</td>
           <td>Q5 — "14일" 조항 누락</td>
-          <td class="fix">제목 기반 청킹 재설계</td>
+          <td class="fix">제목 기반 청킹 재설계 — <strong>적용 완료</strong>(2026-07-27, MRR 0.642 → 0.683). 이후 임베딩 모델 교체로 Context Recall@5 0.895까지 상승</td>
         </tr>
         <tr>
           <td class="layer r">Ranking Failure</td>
           <td>정답 근거는 검색되지만 순위가 밀림</td>
           <td>Q7 — 정답 문서가 4위</td>
-          <td class="fix">Cross-Encoder Reranker 도입</td>
+          <td class="fix">조건부 하이브리드 검색(BM25 가중 RRF) — <strong>적용 완료</strong>(2026-08-28, Hit Rate@5 0.929 → <strong>1.000</strong>, nDCG@5 0.818 → 0.847). Cross-Encoder Reranker는 남은 정밀도(0.823) 과제로 이월</td>
         </tr>
         <tr>
           <td class="layer g">Grounding Failure</td>
@@ -562,8 +615,8 @@
         <tr>
           <td class="layer g">Missing Context</td>
           <td>관련 근거가 없을 때 그럴듯한 오답을 생성할 위험</td>
-          <td>무정답 질문 10건 중 8건에서 무관 청크가 임계값 통과</td>
-          <td class="fix">유사도 임계값 필터(0.5) 적용 — 단독으로는 불충분함을 정량 확인, 검색 분별력 개선(청킹·하이브리드)으로 보완 예정</td>
+          <td>무정답 질문 10건 중 8건에서 무관 청크가 임곗값 통과</td>
+          <td class="fix">단일 임곗값(0.5)로는 불충분함을 정량 확인 → <strong>2단 답변 게이트로 전환</strong>(2026-09-03). 「답할 수 있는가」(최고점 ≥ 0.52)와 「무엇을 근거로 넣을까」(≥ 0.44)를 분리. 남은 실패는 <strong>어휘 함정</strong> — 유사도로는 구분 불가<br>→ 재실행 확인(2026-09-11): 할부 계산 질문(03 #8)에서 <strong>최고점 0.433 &lt; 0.52</strong>로 LLM 호출이 생략됐습니다(5건 모두 하한 0.44 미달). #7의 [참고 5]는 0.434로 <strong>하한에만</strong> 걸려 화면에는 뜨되 컨텍스트에서는 빠졌습니다 — 두 임곗값이 각각 동작함이 확인됩니다</td>
         </tr>
         <tr>
           <td class="layer g">Prompt Failure</td>
@@ -590,7 +643,7 @@
       </div>
       <div class="case-row">
         <div>개선점</div>
-        <div>대제목+소제목을 모두 chunk_title 메타데이터에 반영하는 방식으로 변경. top-k를 10으로 늘리면 14일·기산점·서면 방법이 모두 답변에 반영됨을 확인 — 청킹 구조가 원인이라는 가설 검증 완료</div>
+        <div>대제목+소제목을 모두 chunk_title 메타데이터에 반영하는 방식으로 변경. top-k를 10으로 늘리면 14일·기산점·서면 방법이 모두 답변에 반영됨을 확인 — 청킹 구조가 원인이라는 가설 검증 완료<br><span style="color:var(--signal-dim);">→ <strong>적용 완료</strong>(2026-07-27): 38섹션 → 93레코드 → 101청크. MRR@5 0.642 → 0.683으로 <strong>Recall은 그대로인데 순위만 상승</strong> — 못 찾던 것을 찾은 게 아니라 이미 찾던 것을 위로 올린, 청크 경계 정밀화가 기대하는 효과 그대로</span><br><span style="color:var(--amber);">→ <strong>재실행(2026-09-11) 확인 — 미해결.</strong> 정답 청크(청약철회권 행사 기간 및 효력 표)는 <strong>유사도 0.504로 하한(0.44)은 넘지만 하이브리드 순위 10위</strong>라 상위 5건만 쓰는 설정에서 잘립니다. 게이트가 아니라 <strong>순위 문제</strong>임이 확정됐습니다. 같은 청크가 #9(보험 청약)에서는 3위(0.576)로 올라오는 것으로 보아, 보장성·투자성·대출성이 한 표에 섞여 대출 질의에서 임베딩이 희석되는 것으로 보입니다 (03 #5)</span></div>
       </div>
     </div>
 
@@ -610,7 +663,7 @@
       </div>
       <div class="case-row">
         <div>개선점</div>
-        <div>생성 단계 추론 최소화. "제재·처벌 수위가 자료에 있으면 구체적 수치를 우선 포함", "위반 유형이 여러 개면 구분해서 답변"하도록 프롬프트 개선</div>
+        <div>생성 단계 추론 최소화. "제재·처벌 수위가 자료에 있으면 구체적 수치를 우선 포함", "위반 유형이 여러 개면 구분해서 답변"하도록 프롬프트 개선<br><span style="color:var(--signal-dim);">→ <strong>재실행(2026-09-11) 확인 — 부분 해결.</strong> "법적 보호를 받기 어렵다" 추론 문장은 사라졌습니다. 다만 <strong>"5년 이하의 징역 또는 5천만원 이하의 벌금"이 인용한 [참고 1](0.537) 본문에 그대로 있는데도 답변이 옮기지 않았습니다</strong> — 검색은 성공했고 <strong>생성 단계의 완전성</strong>만 남은, 유형이 분명한 실패입니다 (03 #6)</span></div>
       </div>
     </div>
 
@@ -630,12 +683,12 @@
       </div>
       <div class="case-row">
         <div>개선점</div>
-        <div>질문과 직접 관련된 문서가 상위에 검색되도록 개선 — 하이브리드 검색(BM25 결합)·리랭커 도입. 다른 질문에서도 동일한 순위 문제가 관찰됨</div>
+        <div>질문과 직접 관련된 문서가 상위에 검색되도록 개선 — 하이브리드 검색(BM25 결합)·리랭커 도입. 다른 질문에서도 동일한 순위 문제가 관찰됨<br><span style="color:var(--signal-dim);">→ <strong>적용 완료</strong>(2026-08-28): 조건부 가중 RRF. 다만 <strong>관례값(k=60·동등 가중)으로 붙였을 때는 오히려 나빠져</strong>(Context Recall@5 0.889 → 0.812) 질의 유형별 가중과 k=10으로 재설계한 뒤에야 효과가 나왔습니다. Hit Rate@5 <strong>1.000</strong> · 조항 번호 유형 0.875 → 1.000, 악화 문항 0개</span><br><span style="color:var(--amber);">→ <strong>재실행(2026-09-11) 확인 — 순위는 해결, 원인은 재분류.</strong> 정답 문서가 4위 → <strong>1위</strong>로 올라와 Ranking Failure는 해소됐습니다. 그런데 <strong>"돈을 받고"(대가 수수) 누락은 generation 일반화가 아니었습니다</strong> — 청크 본문이 "다음의 행위를 해서는 안 됩니다"에서 끝나고 <strong>다섯 항목이 코퍼스에 아예 없습니다.</strong> 추출 단계의 목록 유실이며, 같은 패턴이 <strong>101청크 중 20개</strong>에서 발견됩니다 (03 데이터 결함)</span></div>
       </div>
     </div>
 
     <div class="callout">
-      <strong>평가</strong> — 수동 대조 기반의 간략한 중간 점검 평가를 진행한 내용입니다. 다음 단계에서 활용되지 않은 100문 100답 기반 골든 데이터셋을 확장하고, 발견된 병목 순서대로(제목 기반 청킹 → 하이브리드 검색) 개선을 진행해서 다시 평가해 볼 예정입니다.
+      <strong>평가</strong> — 수동 대조 기반의 간략한 중간 점검 평가입니다. 여기서 세운 계획(골든셋 확장 → 제목 기반 청킹 → 하이브리드 검색)은 <strong>모두 실행했고 정량 측정으로 확인했습니다.</strong> 검색 지표는 정답 근거가 존재하는 28문항을 기준으로, 무정답 28문항은 별도의 게이트 평가에 사용했습니다. 골든셋은 30 → 38 → <strong>56문항</strong>으로 늘렸고, 위 표의 개선 방향 5개 중 4개가 적용 완료입니다.<br><br>다만 <strong>수동 대조로 잡은 병목과 정량 측정이 가리킨 병목이 달랐던 지점</strong>이 이 프로젝트의 실제 교훈입니다. 조항 번호 질의 3건이 전부 실패해 유형 전반이 무너진 줄 알았으나, 8문항으로 재보니 Context Recall@5는 0.875였고 진짜 실패는 1건뿐이었습니다. <em>골든셋을 먼저 만들지 않았다면 없는 문제를 고칠 뻔했습니다.</em>
     </div>
   </section>
 
@@ -678,7 +731,7 @@
       </div>
       <div class="stage">
         <div class="n">DETECTION</div><div class="t">탐지</div>
-        <div class="d">유사도 임계값(0.5) 미달 컨텍스트 차단 — 골든셋 측정 결과 무관 질문의 거부는 2/10에 그쳐 임계값 단독 탐지로는 불충분함을 확인</div>
+        <div class="d">2단 답변 게이트 — 최고점 ≥ 0.52여야 답변을 시작하고(질문 단위), 그 뒤 ≥ 0.44인 청크만 근거로 전달(청크 단위). 단일 임곗값으로는 정답 청크 42개 중 29개가 무정답 top1 범위와 겹쳐 분리가 불가능했습니다</div>
       </div>
       <div class="stage">
         <div class="n">MITIGATION</div><div class="t">완화</div>
@@ -686,7 +739,7 @@
       </div>
       <div class="stage">
         <div class="n">VERIFICATION</div><div class="t">검증</div>
-        <div class="d">골든셋 30문항 기반 Recall@5·MRR·전달률·거부 정확성 측정 완료. Faithfulness 검증은 다음 단계</div>
+        <div class="d">골든셋 <strong>56문항</strong> 기반 검색·게이트 지표(Hit Rate·Context Recall/Precision·nDCG·MRR·post-filter·Refusal Rate) 측정 완료. LLM 호출이 없어 무료·결정론적이라 변경마다 회귀 테스트로 재실행. <strong>생성 단계 평가(RAG Triad)는 다음 단계</strong></div>
       </div>
     </div>
     <div class="callout" style="margin-top:14px;">
@@ -705,7 +758,17 @@
         <tr>
           <td>Context Precision (검색 정밀도)</td>
           <td><span class="badge badge-warn">⚠ 부분충족</span></td>
-          <td>버그 식별 → 수정 완료(2026-07): 유사도 임계값(0.5) 이상 청크만 LLM 컨텍스트로 전달, 관련 청크가 없으면 답변 생성 자체를 건너뜀. 골든셋 측정: Recall@5 0.817 · MRR 0.642 · 전달률 0.667 — 구어체 질문에서 정답 청크가 검색되고도 임계값에 걸려 전달되지 않는 사례 확인</td>
+          <td>버그 식별 → 수정 완료(2026-07): 게이트를 통과한 청크만 LLM 컨텍스트로 전달, 관련 청크가 없으면 답변 생성 자체를 건너뜀. 현재 <strong>Context Precision@5 0.823 · nDCG@5 0.847</strong>. 조문 질의에서 정답이 3~4위이고 그 위 이웃 청크가 게이트를 통과하는 희석이 남아 있어 <strong>Cross-Encoder 리랭커가 다음 후보</strong></td>
+        </tr>
+        <tr>
+          <td>Context Recall (검색 재현율)</td>
+          <td><span class="badge badge-pass">✓ 충족</span></td>
+          <td><strong>정답 근거가 존재하는 28문항 기준</strong> Hit Rate@5 1.000 · Context Recall@5 0.961 · MRR@5 0.848. 정답을 아예 못 찾는 질문은 없습니다. 초기 대비 Recall@5 0.817 → 0.961(청킹 재설계 → 모델 교체 → 하이브리드 검색의 누적)<br><span style="color:var(--muted);font-size:12.5px;">골든셋 56문항 중 나머지 28문항은 무정답 질문이라 정답 청크가 없어 검색 지표 계산에서 제외됩니다.</span></td>
+        </tr>
+        <tr>
+          <td>Refusal / 컨텍스트 전달</td>
+          <td><span class="badge badge-warn">⚠ 부분충족</span></td>
+          <td>2단 게이트 전환(2026-09-03)으로 <strong>답변 커버리지 0.821 → 0.929 · post-filter Recall 0.746 → 0.889 · 구어체 전달률 0.550 → 0.850.</strong> 「검색은 됐는데 답이 안 나온다」는 실사용 보고 4건이 답변으로 전환. 남은 실패는 <strong>어휘 함정 9문항 중 8건</strong> — 주제가 맞는 근거라 유사도로는 못 막습니다</td>
         </tr>
         <tr>
           <td>Answer Relevance (답변 관련성)</td>
@@ -719,8 +782,8 @@
         </tr>
         <tr>
           <td>Safety (면책 안내)</td>
-          <td><span class="badge badge-pass">✓ 충족</span></td>
-          <td>이중 레이어 완성(2026-07) — system_prompt 면책 규칙 + UI 고정 문구. LLM이 면책을 생략해도 사용자는 항상 UI에서 확인</td>
+          <td><span class="badge badge-warn">⚠ 부분충족</span></td>
+          <td>이중 레이어 구성(2026-07) — system_prompt 면책 규칙 + UI 고정 문구. UI 문구는 항상 렌더되므로 사용자가 면책을 못 보는 일은 없습니다.<br>다만 2026-09-11 재실행에서 <strong>LLM이 면책 문장을 본문에 넣은 것은 생성된 9건 중 4건</strong>뿐이었습니다. UI 레이어가 받쳐 주고 있을 뿐 <strong>프롬프트 레이어의 준수율은 절반에 못 미치므로</strong> 충족으로 판정하지 않습니다</td>
         </tr>
       </tbody>
     </table>
@@ -729,36 +792,45 @@
   <!-- 09. 다음 단계 -->
   <section id="roadmap">
     <div class="sec-head"><span class="sec-num">09</span><h2 class="sec-title">다음 단계 — 정량 검증 로드맵</h2></div>
-    <p class="body">정적 분석과 수동 사례 대조에서 출발해, 검색 단계는 골든셋 기반 정량 측정까지 완료했습니다(2026-07-13). "신뢰할 수 있다"를 주장이 아닌 측정으로 바꾸기 위해, 검색과 생성을 분리해 다음 순서로 정량화합니다.</p>
+    <p class="body">정적 분석과 수동 사례 대조에서 출발해, <strong>검색과 답변 게이트는 정량 측정으로 닫았습니다.</strong> "신뢰할 수 있다"를 주장이 아닌 측정으로 바꾸는 작업이며, 남은 미측정 영역은 <strong>생성 단계와 도메인 특화 검증</strong> 둘입니다.</p>
     <table>
       <thead><tr><th>단계</th><th>검증 방법</th><th>지표</th><th>상태</th></tr></thead>
       <tbody>
         <tr>
           <td class="layer r">검색 (Retrieval)</td>
-          <td>골든셋 30문항(법령 용어 10 · 100문 100답 기반 구어체 10 · 무정답 10)으로 정답 청크가 상위 k개에 검색되는지 대조 — LLM 호출 없이 결정론적으로 측정 (<code>eval/run_eval.py</code>)</td>
-          <td><code>Recall@5</code> · <code>MRR</code> · 전달률</td>
-          <td>완료 — 베이스라인 Recall@5 0.817 / MRR 0.642 / 전달률 0.667</td>
+          <td><strong>정답 근거가 존재하는 28문항</strong>(법령 용어 10 · 구어체 10 · 조항 번호 8)에서 정답 청크가 상위 k개에 검색되는지 대조. 나머지 무정답 28문항은 정답 청크가 없으므로 아래 게이트 항목에서만 사용합니다 — LLM 호출 없이 결정론적으로 측정</td>
+          <td><code>Hit Rate@5</code> · <code>Context Recall/Precision@5</code> · <code>nDCG@5</code> · <code>MRR@5</code></td>
+          <td class="state"><span class="badge badge-pass">✓ 완료</span><span class="hl">Hit Rate@5 1.000 · Recall@5 0.961</span><span class="note">nDCG@5 0.847 · MRR@5 0.848<br>정답이 존재하는 28문항 기준이며, 베이스라인 Recall@5 0.817에서 출발했습니다.</span></td>
+        </tr>
+        <tr>
+          <td class="layer g">답변 게이트 (Abstention)</td>
+          <td>무정답 28문항(도메인 내 무관 19 + 어휘 함정 9)에서 게이트 통과 청크가 0건인지, 정답 문항에서는 근거가 실제로 LLM에 전달되는지 동시 측정</td>
+          <td>Refusal Rate(specificity) · post-filter Recall · 답변 커버리지</td>
+          <td class="state"><span class="badge badge-pass">✓ 완료</span><span class="hl">커버리지 0.929 · post-filter 0.889 · 거부율 0.737</span><span class="note">2단 게이트 적용 결과이며, 거부율은 명백히 거부해야 할 무관 19문항 기준입니다. 어휘 함정은 별도 과제로 남아 있습니다.</span></td>
         </tr>
         <tr>
           <td class="layer g">생성 (Generation)</td>
-          <td>RAG Triad — 답변을 주장 단위로 분해해 검색 컨텍스트에 근거가 있는지 검증(LLM-as-judge), 답변에서 질문을 역생성해 관련성 점수화</td>
-          <td>Faithfulness · Answer Relevance</td>
-          <td>계획</td>
+          <td>RAG Triad의 세 축을 LLM-as-judge로 판정 — <strong>Context Relevance</strong>(검색된 컨텍스트가 질문에 관련되는가) · <strong>Groundedness</strong>(답변의 각 주장이 컨텍스트에 근거하는가) · <strong>Answer Relevance</strong>(답변이 질문에 실제로 답하는가). <strong>선행 조건</strong>: 시스템 프롬프트가 웹 앱 본체에 들어 있어 평가 코드에서 불러올 수 없으므로, 생성 로직을 별도 모듈로 떼어내는 작업이 먼저</td>
+          <td>Context Relevance · Groundedness · Answer Relevance</td>
+          <td class="state"><span class="badge badge-warn">⚠ 계획</span><span class="hl">표본 검증을 먼저</span><span class="note">LLM 판정에 비용이 들어, 5~10건에서 사람 판정과의 일치율을 확인한 뒤 전체에 적용합니다.</span></td>
         </tr>
         <tr>
           <td class="layer g">도메인 특화</td>
-          <td>답변과 근거 청크의 금액·기간·비율을 정규식 대조, [참고 N] 인용 번호 무결성 검증, 코퍼스 밖 질문에 대한 거부 정확성 측정</td>
-          <td>수치 일치율 · 거부율</td>
-          <td>거부 정확성 측정 완료 — 0.200. 수치 대조·인용 무결성은 계획</td>
+          <td>답변과 근거 청크의 금액·기간·비율을 정규식 대조, [참고 N] 인용 번호 무결성 검증 — <strong>둘 다 LLM 없이 결정론적으로 가능</strong>하므로 생성 평가보다 먼저 붙일 항목</td>
+          <td>수치 일치율 · 인용 무결성</td>
+          <td class="state"><span class="badge badge-warn">⚠ 계획</span><span class="hl">다음 착수 대상</span><span class="note">수치 일치율과 인용 무결성을 붙일 차례입니다. 거부 측정은 위 게이트 항목으로 이관을 마쳤습니다.</span></td>
         </tr>
         <tr>
           <td class="layer r">회귀 방지</td>
-          <td>프롬프트·청킹·검색 변경 시 골든셋 평가를 재실행해 지표 하락 여부 확인</td>
+          <td>프롬프트·청킹·검색 변경 시 골든셋 평가를 재실행해 지표 하락 여부 확인. 지표 공식 자체도 자체 검증 루틴으로 확인(측정 코드가 조용히 틀어지면 모든 판단이 오염되므로)</td>
           <td>변경 전후 지표 비교</td>
-          <td>실행 수단 확보 — <code>eval/run_eval.py</code> 재실행으로 전후 비교 가능.</td>
+          <td class="state"><span class="badge badge-pass">✓ 운용 중</span><span class="hl">변경 4회 모두 전후 비교로 판단</span><span class="note">청킹 재설계 · 모델 교체 · 하이브리드 검색 · 게이트 전환.<br>표 분할, 균일 가중 하이브리드처럼 <strong>지표가 나빠져 되돌린 변경도 함께 기록</strong>했습니다. 자동화 연결은 계획 단계입니다.</span></td>
         </tr>
       </tbody>
     </table>
+    <div class="callout" style="margin-top:14px;">
+      <strong>남은 병목</strong> — 검색은 Hit Rate@5 1.000으로 닫혔고 게이트도 post-filter 0.889까지 올랐습니다. 남은 실패는 <strong>유사도 점수로는 원리적으로 풀 수 없는 종류</strong>입니다. 어휘 함정(「해외로 잘못 송금한 경우에도 착오송금 반환지원을 받나요?」)의 top1 유사도는 0.722로 실제 정답 청크 대부분보다 높습니다 — 근거가 <em>주제상으로는 맞기</em> 때문입니다. 점수 정규화(z-score·평균 오프셋)로 분리를 키우려는 시도는 측정 결과 <strong>전부 raw 코사인보다 나빴습니다.</strong> 따라서 다음은 임곗값 조정이 아니라 <strong>생성 단계 검증</strong>입니다.
+    </div>
   </section>
 
   <!-- 10. 수행 내용 -->
@@ -793,7 +865,17 @@
       </div>
       <div class="feature-card">
         <h3>RAG Evaluation 설계</h3>
-        <p>Recall@5·MRR·RAG Triad 기반 정량 검증 체계 설계</p>
+        <p>골든셋 56문항 기반 검색·게이트 지표 체계 구축 — 검색 28문항과 무정답 28문항을 목적에 맞게 분리. LLM 판정이 없어 비용 없이 결정론적으로 계산되므로 변경마다 회귀 테스트로 재실행</p>
+        <p><code>Hit Rate</code> / <code>Context Recall·Precision</code> / <code>nDCG</code> / <code>MRR</code> / <code>Refusal Rate</code></p>
+      </div>
+      <div class="feature-card">
+        <h3>측정 기반 개선</h3>
+        <p>청킹 재설계 → 임베딩 모델 교체 → 조건부 하이브리드 검색 → 2단 답변 게이트를 전후 비교로 판단</p>
+        <p>Recall@5 <code>0.817 → 0.961</code> · 거부율 <code>0.200 → 0.737</code></p>
+      </div>
+      <div class="feature-card">
+        <h3>기각한 가설 기록</h3>
+        <p>금융 특화 모델·RRF 관례값·점수 정규화 등 측정으로 뒤집힌 결과를 근거와 함께 보존</p>
       </div>
       <div class="feature-card">
         <h3>RAG 시스템 구현</h3>
@@ -801,6 +883,7 @@
       </div>
     </div>
   </section>
+</div>
 
 </body>
 </html>
