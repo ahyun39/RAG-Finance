@@ -13,19 +13,19 @@
 
 import os
 import re
-import json
+import sys
 import streamlit as st
-import numpy as np
-import faiss
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
 
-MODEL_NAME = "nlpai-lab/KURE-v1"
+# 설정값과 검색 로직은 src/ 한 곳에서만 정의한다.
+sys.path.insert(0, "src")
+from config import MODEL_NAME, TOP_K
+from vector_search import (build_bm25, gate, load_index as _load_index,
+                           load_meta as _load_meta, search_hybrid)
+
 UPSTAGE_MODEL = "solar-pro3"
 UPSTAGE_BASE_URL = "https://api.upstage.ai/v1"
-INDEX_FILE = "index/faiss_index.bin"
-META_FILE = "data/chunks_meta.json"
-SIMILARITY_THRESHOLD = 0.55
 
 st.set_page_config(
     page_title="금융 법령 정보 검색",
@@ -40,12 +40,16 @@ def load_model():
 
 @st.cache_resource
 def load_index():
-    return faiss.read_index(INDEX_FILE)
+    return _load_index()
 
 @st.cache_data
 def load_meta():
-    with open(META_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return _load_meta()
+
+@st.cache_resource
+def load_bm25(_meta):
+    # BM25는 순수 파이썬 인덱스라 101청크 기준 즉시 만들어진다. 앱 시작 시 1회만.
+    return build_bm25(_meta)
 
 @st.cache_resource
 def load_llm_client():
@@ -55,47 +59,28 @@ def load_llm_client():
     return OpenAI(api_key=api_key, base_url=UPSTAGE_BASE_URL)
 
 
-def search(query, model, index, meta, top_k=5):
-    # FAISS 행 번호로 meta를 조회하므로 둘의 개수·순서가 어긋나면 안 된다.
-    # meta가 더 길면 예외 없이 '엉뚱한 청크'가 조용히 반환된다. (src/vector_search.py에도 같은 가드)
-    assert index.ntotal == len(meta), (
-        f"인덱스({index.ntotal})와 메타({len(meta)})의 개수가 다릅니다. "
-        "embedding.py -> vector_search.py를 다시 실행해 함께 재생성하세요."
+def build_context(results, selected):
+    """게이트를 통과한 청크만 넣되, 번호는 **화면 카드와 같은 기준**으로 붙인다.
+
+    통과분만 1..N으로 다시 세면 답변의 [참고 N]과 화면의 [참고 N]이 어긋난다.
+    예전에는 결과가 코사인 내림차순이고 게이트가 앞부분만 남겨 자동으로 맞았지만,
+    하이브리드 도입으로 결과 순서가 RRF 기준이 되면서 그 보장이 사라졌다
+    (골든셋 56문항 중 34건에서 코사인이 순서와 어긋난다).
+    그래서 아래 화면 렌더링과 똑같이 `enumerate(results)`로 번호를 매긴다.
+    통과분이 연속이 아니면 번호도 건너뛰는데, 프롬프트가 "컨텍스트에 제시된
+    번호를 그대로 사용"하도록 지시하므로 그대로 두는 것이 맞다.
+    """
+    picked = {r["chunk_id"] for r in selected}
+    return "\n\n".join(
+        f"[참고 {i}] {r['chunk_title']}\n{r['chunk_content']}"
+        for i, r in enumerate(results, start=1)
+        if r["chunk_id"] in picked
     )
 
-    query_vec = model.encode(
-        [query],
-        convert_to_numpy=True,
-        normalize_embeddings=True,
-    ).astype("float32")
 
-    scores, indices = index.search(query_vec, top_k)
-
-    results = []
-    for score, idx in zip(scores[0], indices[0]):
-        if idx == -1:
-            continue
-        item = meta[idx]
-        results.append({
-            "chunk_id": item["chunk_id"],
-            "chunk_title": item["chunk_title"],
-            "chunk_content": item["chunk_content"],
-            "score": float(score),
-        })
-    return results
-
-
-def build_context(results):
-    """검색 결과를 LLM 프롬프트용 컨텍스트 문자열로 변환"""
-    blocks = []
-    for i, r in enumerate(results, start=1):
-        blocks.append(f"[참고 {i}] {r['chunk_title']}\n{r['chunk_content']}")
-    return "\n\n".join(blocks)
-
-
-def generate_answer(client, query, results):
-    """검색된 chunk를 컨텍스트로 Upstage(Solar)에게 답변 생성 요청"""
-    context = build_context(results)
+def generate_answer(client, query, results, selected):
+    """게이트를 통과한 chunk를 컨텍스트로 Upstage(Solar)에게 답변 생성 요청"""
+    context = build_context(results, selected)
 
     # 링크 뒤 조사 분리는 프롬프트가 아닌 정규식 후처리(호출부)로 보장
     system_prompt = """당신은 한국 금융 관련 법령 정보를 안내하는 어시스턴트입니다.
@@ -194,6 +179,7 @@ with st.spinner("검색 엔진을 준비하는 중..."):
     model = load_model()
     index = load_index()
     meta = load_meta()
+    bm25 = load_bm25(meta)
     llm_client = load_llm_client()
 
 if llm_client is None:
@@ -211,7 +197,10 @@ with col1:
         label_visibility="collapsed",
     )
 with col2:
-    top_k = st.selectbox("표시 개수", [3, 5, 10], index=1, label_visibility="collapsed")
+    # 기본값은 평가와 같은 TOP_K — 평가된 적 없는 설정이 기본으로 나가지 않게 한다
+    _options = [3, 5, 10]
+    top_k = st.selectbox("표시 개수", _options, index=_options.index(TOP_K),
+                         label_visibility="collapsed")
 
 search_clicked = st.button("검색", type="primary", use_container_width=False)
 
@@ -220,10 +209,11 @@ st.divider()
 # ===== 검색 실행 및 결과 표시 =====
 if search_clicked and query:
     with st.spinner("검색 중..."):
-        results = search(query, model, index, meta, top_k=top_k)
+        results = search_hybrid(query, model, index, meta, bm25, top_k=top_k)
 
-    # 임계값 미만 청크는 LLM 컨텍스트에서 제외 (UI에는 전체 결과 표시)
-    relevant_results = [r for r in results if r["score"] >= SIMILARITY_THRESHOLD]
+    # 2단 게이트로 LLM에 넘길 근거를 고른다 (UI에는 전체 결과 표시).
+    # 통과가 0건이면 답변을 생성하지 않는다 — src/vector_search.gate 참고
+    relevant_results = gate(results)
 
     if not results:
         st.info("검색 결과가 없습니다. 다른 검색어로 시도해보세요.")
@@ -234,7 +224,7 @@ if search_clicked and query:
         elif llm_client is not None:
             with st.spinner("답변을 생성하는 중..."):
                 try:
-                    answer = generate_answer(llm_client, query, relevant_results)
+                    answer = generate_answer(llm_client, query, results, relevant_results)
 
                     answer = re.sub(
                         r'(\(https?://[^)]+\))(에서|에|의|은|는|이|가|을|를)',
