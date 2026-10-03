@@ -1,9 +1,7 @@
-docs/feedback.md
-docs/next_actions.md
-docs/portfolio.html
-docs/rag_portfolio.html
-
+docs/study/
+docs/result.md
 .DS_Store
 __pycache__/
 *.pyc
 venv/
+index/
