@@ -164,7 +164,7 @@ def search_hybrid(query, model, index, meta, bm25, top_k=TOP_K, rrf_k=RRF_K):
     # 조문 번호가 들어 있는 질의는 정확 토큰 매칭이 핵심이라 어휘 검색에 더 무게를 준다
     weight = LEXICAL_WEIGHT_STATUTE if _STATUTE.search(query) else LEXICAL_WEIGHT
 
-    missing = len(meta) + 1          # 한쪽 랭킹에 없으면 최하위로 취급
+    missing = len(meta) + 1          # 방어용: 두 랭킹 모두 코퍼스 전체를 덮으므로 현재는 쓰이지 않는다
     fused = sorted(
         range(len(meta)),
         key=lambda i: -(1.0 / (rrf_k + dense_rank.get(i, missing))
@@ -191,7 +191,7 @@ def gate(results, answer_threshold=ANSWER_THRESHOLD, context_floor=CONTEXT_FLOOR
 
     두 판단을 분리하는 이유:
     코사인 점수만으로는 "답이 있는 질문"과 "답이 없는 질문"을 가를 수 없다.
-    골든셋 실측에서 정답 청크 42개 중 29개가 무정답 질문 top1 점수 범위 안에 들어온다.
+    골든셋 실측(질문 단위 최고 코사인)에서 정답 있는 질문 28개 중 17개가 무정답 질문 점수 범위 안에 들어온다.
     단일 임계값을 낮추면 무관한 근거가 새고, 높이면 관련 문서가 있는데도 답변이 안 나온다.
 
     그래서 질문 단위로 먼저 답변 여부를 정하고(최고점 >= answer_threshold),
